@@ -11,3 +11,5 @@ coverage
 error.log
 ormconfig.json
 .vscode
+docker-compose.yml
+Dockerfile
