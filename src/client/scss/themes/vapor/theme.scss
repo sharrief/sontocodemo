@@ -1,0 +1,13 @@
+$brown: rgb(124,65,33) !default;
+$gold: rgb(236,188,30) !default;
+$info:          $gold !default;
+
+@import "~bootswatch/dist/vapor/_variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/vapor/_bootswatch";
+
+@import '../../customizations.scss';
+
+.card {
+  border-color: $info;
+}

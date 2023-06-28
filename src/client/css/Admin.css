@@ -1,0 +1,15 @@
+body, header, footer {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+}
+
+.operation-details .modal-dialog{
+  width: 90%!important;
+  max-width: none!important;
+}
+
+#root .input-group-append, #root .input-group-prepend { 
+  height: calc(1.5em + 0.75rem + 2px);
+}

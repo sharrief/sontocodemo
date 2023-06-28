@@ -1,0 +1,38 @@
+import Brand from '@brand/brandLabels';
+
+const Labels = {
+  serviceName: `${Brand.MidName} - Accounts`,
+  securityOptions: 'Security options',
+  status: 'Status',
+  otpEnabled: '2FA enabled',
+  otpDisabled: '2FA not enabled',
+  toEnable: 'Want to enable 2FA?',
+  otpInstructions: 'With 2-Factor-Authentication enabled you will be asked for a sign-in code from your Authenticator app after entering your email and password during sign-in.',
+  otpWarning: 'If you lose access to your Authenticator app, you will not be able to sign into your account even if you know your password. You will have to verify your identity with us to re-gain access to your account.',
+  otpExtraInstructions: 'You will need to use an Authentiator app to setup your sign-in codes for 2FA. We\'ve listed some popular ones below.',
+  otpExtraInstructions2: 'After installing your Authenticator app, click the button below.',
+  otpSetupHeader: 'To enable 2FA',
+  otpExtraInstructions3: 'Start the process of adding an account to your Authenticator app. When prompted by your app, scan the QR code below.',
+  otpExtraInstructions4: 'If you have trouble scanning the QR code you can try manually entering the infomation below.',
+  secretKey: 'Secret key',
+  accountName: 'Account',
+  uri: 'URI',
+  clickToCopy: 'Click to copy',
+  GoogleAuthenticator: 'Google Authenticator',
+  MicrosoftAuthenticator: 'Microsoft Authenticator',
+  Android: 'Android',
+  iPhone: 'iPhone',
+  generateSecret: 'Start 2FA setup',
+  secretInstructions: '',
+  otpDisablePrompt: 'If you disable 2FA, you will no longer be asked for a code during sign-in. You can re-enable 2FA at any time.',
+  otpDisableLabel: 'Disable 2FA',
+  otpExists: 'You have already enabled 2FA for your account. Proceeding will disable 2FA until you complete the setup again.',
+  codeLabel: 'After scanning the QR code or manually entering the information, your Authenticator app should start generating 6-digit codes. Enter the code it currently shows then cick the button further below to verify your Authenticator app is configured correctly.',
+  codePlaceholder: 'Enter the current code',
+  validateCode: 'Verify code and enable 2FA',
+  invalidCode: 'The code or password was incorrect. Check the password and enter a new code.',
+  enterPasswordToDisable: 'Enter your password to disable 2FA',
+  enterPasswordToEnable: 'Enter your password to enable 2FA',
+};
+
+export default Labels;

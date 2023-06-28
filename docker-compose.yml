@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports: 
+      - "8080:8080"
+    # depends_on:
+    #   - db
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  db:
+    image: mariadb:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    # network_mode: host
+    volumes:
+      - /Users/sharrief/Documents/development/database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 7m(k3oFhjYHxxTwv7.
+
+

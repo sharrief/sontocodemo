@@ -1,0 +1,5 @@
+{
+  "watch": ["src/server", "shared"],
+  "ignore": ["src/client", "src/server/__tests__"],
+  "exec": "ts-node --project tsconfig.server.json -r tsconfig-paths/register -r dotenv/config ./src/server/server.ts"
+}

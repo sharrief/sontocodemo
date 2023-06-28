@@ -1,0 +1,13 @@
+@import './colors.scss';
+
+@import "~bootswatch/dist/darkly/_variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/darkly/_bootswatch";
+
+@import '../../customizations.scss';
+
+$gold: rgb(236,188,30) !default;
+.card {
+  border-color: $gold;
+}
+

@@ -1,0 +1,13 @@
+export * as Address from './Address';
+export * as PhoneAndEmail from './PhoneAndEmail';
+export * as DoB from './DoB';
+export * as FinancialStatus from './FinancialStatus';
+export * as IdentificationNumber from './IdentificationNumber';
+export * as InvestmentExperience from './InvestmentExperience';
+export * as InvestmentTargets from './InvestmentTargets';
+export * as Name from './Name';
+export * as Personhood from './Personhood';
+export * as TaxCountry from './TaxCountry';
+export * as Education from './EducationAndProfession';
+export * as Acknowledgement from './Acknowledgement';
+export * from './BackAndNext';

@@ -1,0 +1,29 @@
+body, header, footer {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+    font-size: .875em;
+    background-color: ;
+}
+
+
+.navbar {
+  border-radius: 0px;
+}
+
+#root .input-group-append, #root .input-group-prepend { 
+  height: calc(1.5em + 0.75rem + 2px);
+}
+
+#root .bottom-nav .menu-item {
+  font-size: .75em;
+}
+
+#root .bottom-nav .menu-item .MuiSvgIcon-root {
+  font-size: 1rem;
+}
+
+#root .statements-list-small.accordion .accordion-header .accordion-button {
+  font-size: .875rem;
+}
