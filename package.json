@@ -8,6 +8,7 @@
     "build:client": "webpack --config webpack.config.prod.js",
     "build:noWatch:client": "webpack --config webpack.config.dev.noWatch.js",
     "build": "rm -rf ./build && npm run build:client",
+    "build:digitalocean": "npm install && npm run build && npm ci",
     "start": "ts-node --project tsconfig.server.json -r tsconfig-paths/register -r dotenv/config ./src/server/server.ts",
     "start:brave": "'/Applications/Brave Browser.app/Contents/MacOS/Brave Browser' --remote-debugging-port=9222",
     "dev:client": "webpack-dev-server --config webpack.config.dev.js",
