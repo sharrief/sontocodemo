@@ -9,7 +9,7 @@ export class Trade implements ITrade {
     id: number;
 
   @Column('varchar', { name: 'trade', nullable: true, length: 100 })
-    currency: string | null;
+    symbol: string | null;
 
   @Column('int', { width: 2, name: 'day', nullable: true })
     day: number | null;

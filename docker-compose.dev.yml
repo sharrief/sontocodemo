@@ -1,0 +1,42 @@
+# also see in .env COMPOSE_PROJECT_NAME=sontocodemo-dev
+name: sontocodemo-dev
+services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    networks:
+      - sontoco-network
+    # keep dev machine from exiting so that commands can be run from terminal later
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  db-dev:
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - database:/var/lib/mysql
+      # bootstrap demo data
+      - ./demodata/dev:/docker-entrypoint-initdb.d
+    networks:
+      - sontoco-network
+    env_file: .env
+    environment:
+      - MARIADB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MARIADB_DATABASE=$DB_NAME
+      - MARIADB_USER=$DB_USER
+      - MARIADB_PASSWORD=$DB_PASSWORD
+
+volumes:
+  node_modules:
+  database:
+
+networks:
+  sontoco-network:
+    driver: bridge

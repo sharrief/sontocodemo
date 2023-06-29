@@ -150,7 +150,7 @@ const watchClient = env.var.WATCH_CLIENT === 'true';
 if (watchClient) {
   expressApp.use('/static', (...args) => (createProxyMiddleware({ target: 'http://localhost:3001' })(...args)));
 } else {
-  expressApp.use('/static', express.static(path.join(__dirname, 'static')));
+  expressApp.use('/static', express.static(path.join(__dirname, '../../build/static')));
 }
 
 expressApp.get('/', async (req: Request, res: Response) => {
@@ -161,7 +161,7 @@ expressApp.get('/', async (req: Request, res: Response) => {
         const HTML = getHtml('dashboard');
         return res.send(HTML);
       }
-      return res.sendFile(path.join(__dirname, './static/dashboard.html'));
+      return res.sendFile(path.join(__dirname, '../../build/static/dashboard.html'));
     }
     if (req.user.application) {
       return res.redirect(303, endpoints.application);
@@ -176,7 +176,7 @@ expressApp.get(API.Users.Login.Route, async (req: Request, res: Response) => {
     const HTML = getHtml('login');
     return res.send(HTML);
   }
-  return res.sendFile(path.join(__dirname, './static/login.html'));
+  return res.sendFile(path.join(__dirname, '../../build/static/login.html'));
 });
 
 expressApp.post(`${API.Users.Login.Route}*`,
@@ -219,7 +219,7 @@ expressApp.get(`${endpoints.passwordReset}:resetKey?`, (_req: Request, res: Resp
     const HTML = getHtml('passwordReset');
     return res.send(HTML);
   }
-  return res.sendFile(path.join(__dirname, './static/passwordReset.html'));
+  return res.sendFile(path.join(__dirname, '../../build/static/passwordReset.html'));
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -245,7 +245,7 @@ expressApp.get(`${endpoints.application}*`, (req: Request, res: Response) => {
     const HTML = getHtml('application');
     res.send(HTML);
   } else {
-    res.sendFile(path.join(__dirname, './static/application.html'));
+    res.sendFile(path.join(__dirname, '../../build/static/application.html'));
   }
 });
 
@@ -308,7 +308,7 @@ debug('Starting jobs...');
 startWatchNewRequests();
 debug('Starting listener...');
 const port = env.var.PORT || 8080;
-debug(`Will connect to DB @${env.var.DB_HOST} on port 3306`);
+debug(`Will connect to DB @${env.var.DB_HOST} on port ${env.var.DB_PORT}`);
 if (env.isProduction) {
   createTerminus(expressApp, {
     onSignal: async () => {

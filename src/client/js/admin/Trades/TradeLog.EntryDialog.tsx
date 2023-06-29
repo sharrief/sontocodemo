@@ -103,7 +103,7 @@ const EntryDialog = (props: { bookName: string; busy: boolean }) => {
       handleClose={hideDialog}
       header={<span className='fs-5'>{bookName}: {bookNumber}.{tradeNumber}</span>}
       body={<>
-        <div>Currency</div>
+        <div>Symbol</div>
         <FormControl
             className='mb-1'
             value={symbol}

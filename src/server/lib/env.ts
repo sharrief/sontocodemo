@@ -7,6 +7,7 @@ enum NODE_ENV {
 enum DB_SERVER {
   az = 'azure',
   dh = 'dreamhost',
+  do = 'digitalocean',
   ldh = 'localdreamhost'
 }
 const { env } = process as { env: {
@@ -18,6 +19,7 @@ const { env } = process as { env: {
   COOKIE_SECRET?: string;
   DB_SERVER?: DB_SERVER;
   DB_HOST?: string;
+  DB_PORT?: string;
   DB_NAME?: string;
   DB_USER?: string;
   DB_PASSWORD?: string;
@@ -47,6 +49,7 @@ const isStaging = env.NODE_ENV === NODE_ENV.staging;
 const isDevelopment = (env.NODE_ENV === NODE_ENV.development || (!isTest && !isStaging && !isProduction));
 const isLiveSite = isProduction || isStaging;
 const isAzure = env.DB_SERVER === DB_SERVER.az;
+const isDigitalOcean = env.DB_SERVER === DB_SERVER.do;
 
 export default {
   var: {
@@ -60,4 +63,5 @@ export default {
   isTest,
   isLiveSite,
   isAzure,
+  isDigitalOcean,
 };

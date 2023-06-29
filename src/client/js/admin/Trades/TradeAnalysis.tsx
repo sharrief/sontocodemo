@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { chain, percent } from '@numbers';
 import {
-  CurrencyPair, ITradeEntry, TradeSide,
+  AssetSymbol, ITradeEntry, TradeSide,
   TradeModel,
 } from '@interfaces';
 import { TradeAnalytics as labels } from '@labels';
@@ -69,7 +69,7 @@ const TradeLog = (props: { trades: ITradeEntry[]; show: boolean}) => {
       Short: { w: number; l: number; pw: number; pl: number };
     };
   } = {};
-  const sliceKeys = $enum(sliceBy === 'symbol' ? CurrencyPair : TradeModel);
+  const sliceKeys = $enum(sliceBy === 'symbol' ? AssetSymbol : TradeModel);
   sliceKeys.forEach((slice) => {
     pipsBySlice[slice] = {
       Long: {
@@ -422,7 +422,7 @@ const TradeLog = (props: { trades: ITradeEntry[]; show: boolean}) => {
                     variant={sliceBy === 'symbol' ? 'secondary' : 'outline-secondary'}
                     onClick={handleSliceByCurrencyClicked}
                     >
-                    {labels.currencies}
+                    {labels.symbols}
                   </Button>
                   <Button
                     variant={sliceBy === 'model' ? 'secondary' : 'outline-secondary'}

@@ -95,8 +95,8 @@ const TradeReport = () => {
     ? getMonthDropdownTitle(availableMonths[filteredMonthIndex])
     : <Spinner size='sm' animation='grow' />;
 
-  const getTradeRowContent = ({ currency, interest }: ITrade) => <>
-    <Col className='d-flex'>{currency}</Col>
+  const getTradeRowContent = ({ symbol, interest }: ITrade) => <>
+    <Col className='d-flex'>{symbol}</Col>
     <Col className={interest > 0 ? 'text-success' : 'text-danger'}>{percent(interest / 100)}</Col>
   </>;
 

@@ -5,7 +5,7 @@ import {
   JsonController, Get, Req, Res, UseBefore, Body, Post,
 } from 'routing-controllers';
 import { error } from '@log';
-import { getConnection } from 'typeorm';
+import { getConnection } from '@lib/db';
 import { Users } from '@repositories';
 import { API } from '@api';
 import { AuthMiddleware } from '@middleware/auth';

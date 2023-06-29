@@ -1,22 +1,41 @@
 services:
   web:
-    build: .
-    volumes:
-      - .:/usr/src/app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
     ports: 
       - "8080:8080"
-    # depends_on:
-    #   - db
-    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - sontoco-network
+
   db:
-    image: mariadb:latest
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.database
+    restart: unless-stopped
+    env_file: .env
     ports:
       - "3306:3306"
-    # network_mode: host
     volumes:
-      - /Users/sharrief/Documents/development/database:/var/lib/mysql
+      - database:/var/lib/mysql
+      # bootstrap demo data
+      - ./demodata/prod:/docker-entrypoint-initdb.d
+    networks:
+      - sontoco-network
     environment:
-      MYSQL_ROOT_PASSWORD: 7m(k3oFhjYHxxTwv7.
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_PASSWORD
 
+volumes:
+  node_modules:
+  database:
 
+networks:
+  sontoco-network:
+    driver: bridge

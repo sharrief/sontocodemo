@@ -31,9 +31,9 @@ export interface ITradeSymbol extends IBaseEntityRecord{
 export interface ITradeModel extends IBaseEntityRecord{
   name: string;
 }
-const currencyPipFactor: (symbol: string) => number = (symbol) => {
+const symbolyPipFactor: (symbol: string) => number = (symbol) => {
   switch (symbol) {
-    case 'USD/JPY':
+    case 'ABCDE':
       return 2;
     default: return 4;
   }
@@ -43,6 +43,6 @@ export const calcPips = (entry: number, exit: number, side: TradeSide, symbol: s
   const isLong = side === TradeSide.Long;
   if (!exit) return 0;
   return +(isLong ? chain(exit).subtract(entry || 0) : chain(entry || 0).subtract(exit))
-    .multiply(10 ** currencyPipFactor(symbol)).round(2)
+    .multiply(10 ** symbolyPipFactor(symbol)).round(2)
     .done();
 };

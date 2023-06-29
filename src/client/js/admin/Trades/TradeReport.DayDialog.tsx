@@ -1,5 +1,5 @@
 import ResponsiveModal from '@client/js/components/Modal';
-import { NewTrade as INewTrade, CurrencyPair, ITrade } from '@interfaces';
+import { NewTrade as INewTrade, AssetSymbol, ITrade } from '@interfaces';
 import React, { useEffect, useState } from 'react';
 import { TradeReport as Labels, TradeReport as labels } from '@labels';
 import {
@@ -67,16 +67,16 @@ const TradeReportDialog = (props: {
     }
   }, [props.day, props.month, props.year]);
 
-  const [currency, setCurrency] = useState(CurrencyPair.USDCAD);
+  const [symbol, setSymbol] = useState(AssetSymbol.ABCDE);
   const [interest, setInterest] = useState(0);
   const [isPositive, setIsPositive] = useState(true);
   const newTradeInput = {
-    day, currency, interest,
+    day, symbol, interest,
   };
 
   // eslint-disable-next-line no-nested-ternary
   const getNewTradeString = (trade: NewTrade) => <>
-    <span className='pe-1'>{trade.currency}</span>
+    <span className='pe-1'>{trade.symbol}</span>
     {// eslint-disable-next-line no-nested-ternary
     <span className={trade.interest === 0 ? '' : trade.interest > 0 ? 'text-success' : 'text-danger'}>
       {percent((+`${trade.interest}` / 100))}
@@ -98,7 +98,7 @@ const TradeReportDialog = (props: {
     if (!+interest) return;
     const newTrade: ITrade = {
       interest: isPositive ? interest : -interest,
-      currency,
+      symbol,
       id: Math.floor(Math.random() * 1000),
       year,
       month,
@@ -133,7 +133,7 @@ const TradeReportDialog = (props: {
       setMonth(currentDate.month);
       setYear(currentDate.year);
       setInterest(0);
-      setCurrency(CurrencyPair.USDCAD);
+      setSymbol(AssetSymbol.ABCDE);
     }
   }, [show]);
   return <ResponsiveModal
@@ -196,12 +196,12 @@ const TradeReportDialog = (props: {
       <hr /></> : null }
       <Row>
         <Col>
-          <div className={smallHeaderClassName}>{Labels.currency}</div>
-          {$enum(CurrencyPair).map((c, cIndex) => <Button
+          <div className={smallHeaderClassName}>{Labels.symbol}</div>
+          {$enum(AssetSymbol).map((c, cIndex) => <Button
             className='col-3'
             variant='outline-primary'
-            active={currency === c}
-            onClick={() => setCurrency(c)}
+            active={symbol === c}
+            onClick={() => setSymbol(c)}
             key={cIndex}
           >
             {c}

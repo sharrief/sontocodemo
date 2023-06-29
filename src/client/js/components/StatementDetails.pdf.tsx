@@ -308,7 +308,7 @@ export const StatementDetailsPDF = (props: {
                   padding: '3 0 3 30',
                   borderBottom: '1px solid black',
                 }}>
-                  <Text>{labels.PositionDescription}{trade.currency}</Text>
+                  <Text>{labels.PositionDescription}{trade.symbol}</Text>
                 </View>))
               }
             </View>
