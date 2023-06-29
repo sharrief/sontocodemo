@@ -5,12 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    env_file: .env
     ports: 
       - "8080:8080"
     volumes:
       - .:/usr/src/app
-      - node_modules:/home/node/app/node_modules
+      - node_modules:/usr/src/app/node_modules
     networks:
       - sontoco-network
     # keep dev machine from exiting so that commands can be run from terminal later
@@ -24,7 +23,7 @@ services:
     volumes:
       - database:/var/lib/mysql
       # bootstrap demo data
-      - ./demodata:/docker-entrypoint-initdb.d
+      - ./demodata/dev:/docker-entrypoint-initdb.d
     networks:
       - sontoco-network
     env_file: .env
