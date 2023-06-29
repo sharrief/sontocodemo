@@ -10,6 +10,30 @@ services:
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
-  
+    networks:
+      - sontoco-network
+
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3306:3306"
+    network_mode: host
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - sontoco-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSRWORD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_PASSWORD
+
 volumes:
   node_modules:
+  database:
+
+networks:
+  sontoco-network:
+    driver: bridge

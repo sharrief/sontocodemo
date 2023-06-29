@@ -11,3 +11,4 @@ coverage
 error.log
 ormconfig.json
 .vscode
+.DS_Store
