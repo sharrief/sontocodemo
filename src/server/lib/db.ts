@@ -10,6 +10,7 @@ import {
 } from '@entities';
 import { error } from '@log';
 import pem from '@server/lib/certs/azureMySQLServer';
+import doCert from '@server/lib/certs/ca-certificate';
 import { TradeEntry } from '@server/entities/TradeEntry';
 
 interface ExpressMySqlConfig extends mysql.PoolConfig {
@@ -31,7 +32,7 @@ const DBConfig = {
   name: 'default',
   type: 'mysql',
   host: env.var.DB_HOST,
-  port: 3306,
+  port: env.var.DB_PORT || 3306,
   username: env.var.DB_USER,
   password: env.var.DB_PASSWORD,
   database: env.var.DB_NAME,
@@ -61,6 +62,11 @@ const DBConfig = {
 if (env.isAzure) {
   DBConfig.ssl = {
     ca: pem,
+  };
+}
+if (env.isDigitalOcean) {
+  DBConfig.ssl = {
+    ca: doCert,
   };
 }
 const DBConfigTest = {
