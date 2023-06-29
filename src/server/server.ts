@@ -308,7 +308,7 @@ debug('Starting jobs...');
 startWatchNewRequests();
 debug('Starting listener...');
 const port = env.var.PORT || 8080;
-debug(`Will connect to DB @${env.var.DB_HOST} on port 3306`);
+debug(`Will connect to DB @${env.var.DB_HOST} on port ${env.var.DB_PORT}`);
 if (env.isProduction) {
   createTerminus(expressApp, {
     onSignal: async () => {
