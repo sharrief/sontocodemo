@@ -3,7 +3,7 @@ import { IBaseEntityRecord } from '@interfaces';
 export interface ITrade extends IBaseEntityRecord {
   id: number;
 
-  currency: string | null;
+  symbol: string | null;
 
   day: number | null;
 
@@ -22,16 +22,16 @@ export interface ITrade extends IBaseEntityRecord {
   published: boolean | null;
 }
 
-export type NewTrade = Pick<ITrade, 'currency'|'day'|'interest'>
+export type NewTrade = Pick<ITrade, 'symbol'|'day'|'interest'>
 
-export enum CurrencyPair {
-  USDCAD = 'USD/CAD',
-  GBPUSD = 'GBP/USD',
-  EURUSD = 'EUR/USD',
-  AUDUSD = 'AUD/USD',
-  NZDUSD = 'NZD/USD',
-  USDJPY = 'USD/JPY',
-  USDCHF = 'USD/CHF'
+export enum AssetSymbol {
+  ABCDE = 'ABCDE',
+  BCDEF = 'BCDEF',
+  CDEFG = 'CDEFG',
+  DEFGH = 'DEFGH',
+  EFGHI = 'EFGHI',
+  FGHIJ = 'FGHIJ',
+  GHIJK = 'GHIJK'
 }
 
 export enum TradeModel {

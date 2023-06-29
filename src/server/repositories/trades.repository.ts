@@ -93,7 +93,7 @@ export class Trades extends AbstractRepository<Trade> {
     if (newTrades.length) {
       // add new trades
       await this.manager.createQueryBuilder(Trade, 'trade').insert().values(newTrades.map((t) => ({
-        currency: t.currency,
+        symbol: t.symbol,
         interest: t.interest,
         month,
         year,

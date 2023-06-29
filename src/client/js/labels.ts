@@ -875,8 +875,8 @@ export const TradeLog = {
 
 export const TradeAnalytics = {
   title: 'Analyze',
-  currency: 'currency',
-  currencies: 'currencies',
+  symbol: 'symbol',
+  symbols: 'symbols',
   model: 'model',
   models: 'models',
   Pips: 'Pips',
@@ -895,7 +895,7 @@ export const TradeReport = {
   year: 'Year',
   interest: 'Gain/Loss %',
   gainLoss: 'gain/loss',
-  currency: 'Currency pair',
+  symbol: 'Symbol',
   newTrade: 'New trade',
   specifyInterest: 'Enter a percentage',
   noTradesForDay: 'No trades for this day',
