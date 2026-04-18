@@ -222,10 +222,10 @@ export class ApplicationsController {
   ): ReturnType<typeof API.Applications.Load.post> {
     try {
       if (!req.user.application) { return { error: 'You must sign in to access that information.' }; }
-      const { authEmail, appPIN } = req.user.application;
+      const { uuid, authEmail } = req.user.application;
       const connection = await getConnection();
       const appRepo = connection.getCustomRepository(Applications);
-      const application = await appRepo.findOneOrNull({ authEmail, appPIN });
+      const application = await appRepo.findByUuid(uuid);
       security(`Applicant ${authEmail} accessed application ${application.uuid}`);
       const validationMessages = await ApplicationModel.getValidationMessages(application, true);
       return { application, validationMessages };
@@ -244,10 +244,10 @@ export class ApplicationsController {
   ): ReturnType<typeof API.Applications.Load.post> {
     try {
       if (!req.user.application) { return { error: 'You must sign in to access that information.' }; }
-      const { authEmail, appPIN } = req.user.application;
+      const { uuid, authEmail } = req.user.application;
       const connection = await getConnection();
       const appRepo = connection.getCustomRepository(Applications);
-      const application = await appRepo.findOneOrNull({ authEmail, appPIN });
+      const application = await appRepo.findByUuid(uuid);
       security(`Applicant ${authEmail} accessed application ${application.uuid}`);
       const validationMessages = await ApplicationModel.getValidationMessages(application, true);
       return { application, validationMessages };
@@ -269,14 +269,14 @@ export class ApplicationsController {
       let appPIN;
       let authUserId;
       let savedApplication: IApplication;
-      if ((!req.user.application?.authEmail || !req.user.application?.appPIN) && !req.user.authUser) {
+      if (!req.user.application?.uuid && !req.user.authUser) {
         throw new Error('Unable to save the application because the user is not authenticated.');
       }
       const connection = await getConnection();
       const appRepo = connection.getCustomRepository(Applications);
-      if (req.user.application?.authEmail && req.user.application?.appPIN) {
+      if (req.user.application?.uuid) {
         ({ authEmail, appPIN } = req.user.application);
-        savedApplication = await appRepo.findOneOrNull({ authEmail, appPIN });
+        savedApplication = await appRepo.findByUuid(req.user.application.uuid);
       } else {
         authUserId = req.user.authUser.id;
         ({ authEmail, appPIN } = body.application);
@@ -322,7 +322,7 @@ export class ApplicationsController {
         updatedApplication.dateEnded = Date.now();
       }
 
-      const { application } = await appRepo.saveApplication(authEmail, appPIN, updatedApplication);
+      const { application } = await appRepo.saveApplication(savedApplication.uuid, updatedApplication);
       if (application.clickedToSign) {
         const emailer = new Emailer();
         try {

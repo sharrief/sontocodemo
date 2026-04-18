@@ -97,11 +97,11 @@ passport.serializeUser(async ({ type, ...rest }, done) => {
     done(null, { type, id: authUser.id });
   }
   if (type === 'application' && rest.application) {
-    const { application: { authEmail, appPIN } } = rest;
-    done(null, { type, authEmail, appPIN });
+    const { application: { uuid } } = rest;
+    done(null, { type, uuid });
   }
 });
-passport.deserializeUser(async (serializedData: { type: string; id: number; authEmail: string; appPIN: string}, done) => {
+passport.deserializeUser(async (serializedData: { type: string; id: number; uuid?: string}, done) => {
   try {
     if (serializedData.type === 'user') {
       const { id } = serializedData;
@@ -110,8 +110,8 @@ passport.deserializeUser(async (serializedData: { type: string; id: number; auth
       return done(null, { authUser });
     }
     if (serializedData.type === 'application') {
-      const { authEmail, appPIN } = serializedData;
-      const app = await deserializeApplication(authEmail, appPIN);
+      const { uuid } = serializedData;
+      const app = await deserializeApplication(uuid);
       return done(null, { application: app });
     }
     throw new Error('Failed to deserialize as nothing was provided to deserialize.');

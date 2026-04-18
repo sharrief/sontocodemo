@@ -2,6 +2,7 @@
 import {
   EntityRepository, AbstractRepository, SelectQueryBuilder, Brackets,
 } from 'typeorm';
+import bcrypt from 'bcryptjs';
 import {
   Application, User,
 } from '@entities';
@@ -13,11 +14,7 @@ import { floor, random } from '@numbers';
 import { Users } from '@repositories';
 import { v4 } from 'uuid';
 
-type ManagersLookupQuery =
-{authUserId: User['id']; uuid: Application['uuid']; authEmail?: Application['authEmail']; appPIN?: Application['appPIN'] }
-
-type ApplicantsLookupQuery = {authUserId?: User['id']; uuid?: Application['uuid']; authEmail: Application['authEmail']; appPIN: Application['appPIN']}
-type LookupQuery = ManagersLookupQuery | ApplicantsLookupQuery;
+type LookupQuery = {authUserId: User['id']; uuid: Application['uuid']};
 
 function AppendApplicationAuthorizationQuery(query: SelectQueryBuilder<Application>, authUserId: User['id'], applicationAlias: string) {
   return query
@@ -55,29 +52,56 @@ export class Applications extends AbstractRepository<Application> {
     return this.manager.getCustomRepository(Users).getUserById({ authUserId, id });
   }
 
+  async findByEmail(authEmail: string): Promise<Application | null> {
+    try {
+      const app = await this.createQueryBuilder(this.alias)
+        .where(`${this.alias}.authEmail = :authEmail`, { authEmail })
+        .andWhere(`${this.alias}.deleted = :notDeleted`, { notDeleted: false })
+        .getOne();
+      return app || null;
+    } catch (e) {
+      error(`Error in application.repository.ts->Applications->findByEmail: ${e}`);
+      throw e;
+    }
+  }
+
+  async findByUuid(uuid: string): Promise<Application | null> {
+    try {
+      const app = await this.createQueryBuilder(this.alias)
+        .where(`${this.alias}.uuid = :uuid`, { uuid })
+        .andWhere(`${this.alias}.deleted = :notDeleted`, { notDeleted: false })
+        .getOne();
+      return app || null;
+    } catch (e) {
+      error(`Error in application.repository.ts->Applications->findByUuid: ${e}`);
+      throw e;
+    }
+  }
+
   async createApplication(managerId: Application['fmId'], authEmail: Application['authEmail'], name?: string) {
     try {
       if (!authEmail) { throw new Error('Cannot create an application without an applicant email address'); }
       const manager = await this.getManagerById(managerId);
       if (!manager) throw new Error('No manager found when trying to create application');
-      let appPIN: string;
+      let plainPIN: string;
       let existingApp: Application;
       let maxLoopCount = 10;
       do { // generate a random and unique PIN for the given authEmail
-        appPIN = `${(new Array(Application.appPINLength).fill(0).map(() => floor(random(0, 9))).join(''))}`;
+        plainPIN = `${(new Array(Application.appPINLength).fill(0).map(() => floor(random(0, 9))).join(''))}`;
         // eslint-disable-next-line no-await-in-loop
-        existingApp = await this.findOneOrNull({ appPIN, authEmail });
+        existingApp = await this.findByEmail(authEmail);
         maxLoopCount -= 1;
       }
       while (existingApp && maxLoopCount > 0);
       if (existingApp) {
         throw new Error(`Could not generate a unique appPIN for ${authEmail}.`);
       }
+      const hashedPIN = await bcrypt.hash(plainPIN, 12);
       const uuid = v4();
       const newAppSubmission = {
         ...DefaultApplication,
         uuid,
-        appPIN,
+        appPIN: hashedPIN,
         manager,
         authEmail,
         managerEmail: manager.email,
@@ -89,7 +113,8 @@ export class Applications extends AbstractRepository<Application> {
       const newApp = this.manager.create(Application, newAppSubmission);
       await this.manager.createQueryBuilder(Application, 'Application').insert().values([newApp]).execute();
       const [app] = await this.manager.find(Application, { id: newApp.id });
-      return app || null;
+      // Return the plain PIN alongside the saved app so the controller can email it
+      return app ? { ...app, appPIN: plainPIN } : null;
       // eslint-disable-next-line no-console
       // console.log(app);
     } catch (e) {
@@ -98,16 +123,16 @@ export class Applications extends AbstractRepository<Application> {
     }
   }
 
-  async saveApplication(authEmail: Application['authEmail'], appPIN: Application['appPIN'], updatedApplication: Partial<Application>) {
+  async saveApplication(uuid: string, updatedApplication: Partial<Application>) {
     try {
-      const { id } = await this.findOneOrNull({ authEmail, appPIN }) || {};
+      const { id } = await this.findByUuid(uuid) || {};
       if (!id) {
         throw new Error('The application was not found.');
       }
       const updates = { ...updatedApplication };
       delete updates.id; //*! REMOVED TO PREVENT CHANGING APP ID ON UPDATE
       await this.manager.createQueryBuilder(Application, 'Application').update({ ...updates }).whereInIds([id]).execute();
-      const application = await this.findOneOrNull({ authEmail, appPIN });
+      const application = await this.findByUuid(uuid);
       return { application };
     } catch (e) {
       error(`Error in application.repository.ts->Applications->saveApplication: ${e}`);
@@ -174,23 +199,17 @@ export class Applications extends AbstractRepository<Application> {
   }
 
   async findOneOrNull({
-    authUserId, authEmail, uuid, appPIN,
+    authUserId, uuid,
   }: LookupQuery) {
     try {
-      if ((authUserId != null && uuid == null) || (uuid != null && authUserId == null) || (authEmail != null && appPIN == null) || (appPIN != null && authEmail == null)) {
+      if (!authUserId || !uuid) {
         throw new Error('Could not find the application as the lookup values were incorrect.');
       }
 
       const notDeleted = false;
       let query = await this.createQueryBuilder(this.alias)
-        .where(new Brackets((whereExpression) => {
-          whereExpression
-            .where(`${this.alias}.uuid = :uuid and ${this.alias}.deleted = :notDeleted`, { uuid, notDeleted })
-            .orWhere(`${this.alias}.authEmail = :authEmail and ${this.alias}.app_pin = :appPIN and ${this.alias}.deleted = :notDeleted`, { authEmail, appPIN, notDeleted });
-        }));
+        .where(`${this.alias}.uuid = :uuid and ${this.alias}.deleted = :notDeleted`, { uuid, notDeleted });
 
-      // eslint-disable-next-line no-constant-condition
-      // query = false ? AppendApplicationAuthorizationQuery(query, fmId, alias) : query;
       if (authUserId) query = AppendApplicationAuthorizationQuery(query, authUserId, this.alias);
       const app = await query.getOne();
       return app || null;

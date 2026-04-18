@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { RequestHandler, Request, Response } from 'express';
 import { ExpressMiddlewareInterface } from 'routing-controllers';
 import { error as serverError, info } from '@log';
@@ -13,8 +14,10 @@ async function checkApplicantAuthEmailAndAppPIN(authEmail: string, appPIN: strin
   try {
     const connection = await getConnection();
     const appRepo = connection.getCustomRepository(Applications);
-    const application = await appRepo.findOneOrNull({ authEmail, appPIN });
-    return { application };
+    const app = await appRepo.findByEmail(authEmail);
+    if (!app) return { application: null };
+    const match = await bcrypt.compare(appPIN, app.appPIN);
+    return { application: match ? app : null };
   } catch (error) {
     return { error };
   }
@@ -56,12 +59,11 @@ export function LoginApplicant(req: Request, res: Response, next: (error?: strin
   })(req, res, next);
 }
 
-export async function deserializeApplication(authEmail: string, appPIN: string) {
-  if (!authEmail || !appPIN) { return null; }
+export async function deserializeApplication(uuid: string) {
+  if (!uuid) { return null; }
   const connection = await getConnection();
   const appRepo = connection.getCustomRepository(Applications);
-  const app = await appRepo.findOneOrNull({ authEmail, appPIN });
-  return app;
+  return appRepo.findByUuid(uuid);
 }
 
 export class AuthenticateApplicant implements ExpressMiddlewareInterface {
