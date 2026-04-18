@@ -4,13 +4,22 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .env
-    ports: 
+    environment:
+      # Override DB_SERVER to disable SSL for local Docker MySQL.
+      # The app's src/server/lib/db.ts only enables SSL when DB_SERVER=azure or DB_SERVER=digitalocean.
+      - DB_SERVER=localdreamhost
+    ports:
       - "8080:8080"
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
+      - build:/home/node/app/build
     networks:
       - sontoco-network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
 
   db:
     build:
@@ -22,19 +31,25 @@ services:
       - "3306:3306"
     volumes:
       - database:/var/lib/mysql
-      # bootstrap demo data
       - ./demodata/prod:/docker-entrypoint-initdb.d
     networks:
       - sontoco-network
     environment:
-      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$DB_NAME
-      - MYSQL_USER=$DB_USER
-      - MYSQL_PASSWORD=$DB_PASSWORD
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "--password=${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   node_modules:
   database:
+  build:
 
 networks:
   sontoco-network:
