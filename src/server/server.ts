@@ -33,7 +33,7 @@ import {
   BankAccountsController, TradeLogController,
 } from '@controllers';
 import { StatementsSockets } from '@sockets';
-import { startWatchNewRequests } from '@jobs';
+import { startWatchNewRequests, startDailyReseed } from '@jobs';
 import { createTerminus } from '@godaddy/terminus';
 import type { SessionSocket } from '@types';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -306,6 +306,7 @@ io.on('connection', (socket: SessionSocket) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 debug('Starting jobs...');
 startWatchNewRequests();
+startDailyReseed();
 debug('Starting listener...');
 const port = env.var.PORT || 8080;
 debug(`Will connect to DB @${env.var.DB_HOST} on port ${env.var.DB_PORT}`);
