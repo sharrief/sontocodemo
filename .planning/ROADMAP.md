@@ -35,7 +35,7 @@
 
 Plans:
 - [x] 01-01-PLAN.md — Fix Dockerfile (node:20-alpine, nodemon CMD), audit .dockerignore, create .env.example
-- [ ] 01-02-PLAN.md — Fix docker-compose.yml (MySQL 8, healthcheck, depends_on, DB_SERVER, named build volume)
+- [x] 01-02-PLAN.md — Fix docker-compose.yml (MySQL 8, healthcheck, depends_on, DB_SERVER, named build volume)
 
 ---
 
