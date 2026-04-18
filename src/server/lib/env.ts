@@ -41,6 +41,8 @@ const { env } = process as { env: {
   WATCH_CLIENT?: string;
   SEND_REQUEST_EMAILS?: string;
   NEW_REQUESTS_DISABLED?: string;
+  RESEED_DB?: string;
+  RESEED_DB_CRON?: string;
 }; };
 
 const isProduction = env.NODE_ENV === NODE_ENV.production;
@@ -56,6 +58,8 @@ export default {
     ...env,
     SEND_REQUEST_EMAILS: (() => { switch (env.SEND_REQUEST_EMAILS) { case 'true': return true; case 'false': return false; default: return undefined; } })(),
     NEW_REQUESTS_DISABLED: (() => { switch (env.NEW_REQUESTS_DISABLED) { case 'true': return true; case 'false': return false; default: return undefined; } })(),
+    RESEED_DB: (() => { switch (env.RESEED_DB) { case 'true': return true; case 'false': return false; default: return undefined; } })(),
+    RESEED_DB_CRON: env.RESEED_DB_CRON,
   },
   isDevelopment,
   isProduction,
