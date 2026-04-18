@@ -44,10 +44,10 @@
 
 | REQ-ID  | Phase | Status |
 |---------|-------|--------|
-| DOCK-01 | —     | Pending |
-| DOCK-02 | —     | Pending |
-| DOCK-03 | —     | Pending |
-| ZROK-01 | —     | Pending |
-| ZROK-02 | —     | Pending |
-| ZROK-03 | —     | Pending |
-| ZROK-04 | —     | Pending |
+| DOCK-01 | 1     | Pending |
+| DOCK-02 | 1     | Pending |
+| DOCK-03 | 1     | Pending |
+| ZROK-01 | 2     | Pending |
+| ZROK-02 | 2     | Pending |
+| ZROK-03 | 2     | Pending |
+| ZROK-04 | 2     | Pending |
