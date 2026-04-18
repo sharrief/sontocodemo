@@ -1,1 +1,2 @@
 FROM mysql:8.0
+COPY demodata/prod/sontoco.sql /docker-entrypoint-initdb.d/

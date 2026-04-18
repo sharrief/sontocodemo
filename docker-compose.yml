@@ -32,7 +32,6 @@ services:
       - "3306:3306"
     volumes:
       - database:/var/lib/mysql
-      - ./demodata/prod:/docker-entrypoint-initdb.d
     networks:
       - sontoco-network
     environment:
