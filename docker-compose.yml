@@ -40,7 +40,7 @@ services:
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "--password=${DB_PASSWORD}"]
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$DB_PASSWORD\" mysqladmin ping -h localhost -u \"$DB_USER\" --silent"]
       interval: 10s
       timeout: 5s
       retries: 5
