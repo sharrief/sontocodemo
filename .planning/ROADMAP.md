@@ -60,7 +60,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Update docker-compose.yml port mapping (8901:8080) and .env.example SITE_URL
-- [ ] 02-02-PLAN.md — Install cloudflared via apt, register systemd service, verify public URL end-to-end
+- [x] 02-02-PLAN.md — Install cloudflared via apt, register systemd service, verify public URL end-to-end
 
 ---
 
