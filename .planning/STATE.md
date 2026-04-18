@@ -135,8 +135,9 @@ Plan: 1 of 2
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260418-g2n | Add a scheduled daily database re-seed job | 2026-04-18 | e9aa4e4 | [260418-g2n-add-a-scheduled-daily-database-re-seed-j](./quick/260418-g2n-add-a-scheduled-daily-database-re-seed-j/) |
+| 260418-gmh | Fix security issues CR-01 CR-02 CR-03 CR-07: bcrypt passwords/PINs, remove backdoor, cookie flags | 2026-04-18 | 2160f11 | [260418-gmh-fix-security-issues-cr-01-cr-02-cr-03-cr](./quick/260418-gmh-fix-security-issues-cr-01-cr-02-cr-03-cr/) |
 
 ---
 
 *State initialized: 2026-04-17*
-*Last activity: 2026-04-18 - Completed quick task 260418-g2n: Add a scheduled daily database re-seed job*
+*Last activity: 2026-04-18 - Completed quick task 260418-gmh: Fix security issues CR-01 CR-02 CR-03 CR-07*
