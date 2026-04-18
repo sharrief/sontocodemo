@@ -4,6 +4,7 @@ import {
   EntityRepository, AbstractRepository, Brackets, SelectQueryBuilder,
 } from 'typeorm';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import {
   Delegation,
   User,
@@ -16,7 +17,6 @@ import {
 import { v4 } from 'uuid';
 import { DateTime } from 'luxon';
 import { authenticator } from 'otplib';
-import env from '@server/lib/env';
 import { Sessions } from './sessions.repository';
 import { AUTH_ALLOW_MANAGER, AUTH_ALLOW_MANAGER_TO_EDIT_USER } from './auth.repository.helper';
 
@@ -97,12 +97,12 @@ export class Users extends AbstractRepository<User> {
       .getCount();
   }
 
-  findByEmailAndHashedPassword(email: User['email'], hashedPassword: User['hashedPassword']) {
-    if (!email || !hashedPassword) return undefined;
+  findByEmailForAuth(email: User['email']) {
+    if (!email) return undefined;
     const query = this.createQueryBuilder('user')
+      .addSelect('user.password')
       .addSelect('user.otpSecret1')
       .where('user.email = :email', { email })
-      .andWhere('user.password = :hashedPassword', { hashedPassword })
       .andWhere('user.deleted = 0')
       .andWhere('user.status = :userStatusActive', { userStatusActive: UserAccountStatus.active })
       .andWhere(new Brackets((expression) => {
@@ -231,16 +231,11 @@ export class Users extends AbstractRepository<User> {
       const [user] = await this.accounts({ authUserId: id, accounts: { ids: [id] } }) || [];
       if (!user) throw new Error('Unable to locate the specified user');
 
-      const otpSalt = env.var.DB_PASSWORD_2FA_SALT;
-      const otpHashedPassword = crypto.createHash('sha256')
-        .update(password + otpSalt, 'utf8').digest('hex');
+      const userWithHash = await this.findByEmailForAuth(user.email);
+      const passwordMatch = userWithHash && await bcrypt.compare(password, userWithHash.hashedPassword);
+      if (!passwordMatch) throw new Error('Double check you entered the correct password');
 
-      const validUser = await this.findByEmailAndHashedPassword(user.email, otpHashedPassword);
-      if (!validUser) throw new Error('Double check you entered the correct password');
-
-      const salt = env.var.DB_PASSWORD_SALT;
-      const hashedPassword = crypto.createHash('sha256')
-        .update(password + salt, 'utf8').digest('hex');
+      const hashedPassword = await bcrypt.hash(password, 12);
 
       const result = await this.manager.createQueryBuilder(User, 'User').update({
         hashedPassword,
@@ -282,11 +277,9 @@ export class Users extends AbstractRepository<User> {
     const [user] = await this.accounts({ authUserId: id, accounts: { ids: [id] } }) || [];
     if (!user) throw new Error('Unable to locate the specified user');
 
-    const salt = env.var.DB_PASSWORD_SALT;
-    const hashedPassword = crypto.createHash('sha256')
-      .update(password + salt, 'utf8').digest('hex');
-    const validUser = await this.findByEmailAndHashedPassword(user.email, hashedPassword);
-    if (!validUser) throw new Error('Double check you entered the correct password');
+    const userWithHash = await this.findByEmailForAuth(user.email);
+    const passwordMatch = userWithHash && await bcrypt.compare(password, userWithHash.hashedPassword);
+    if (!passwordMatch) throw new Error('Double check you entered the correct password');
 
     const queryUserWithOTP = await this.createQueryBuilder('user')
       .select('user.otpSecretTemp')
@@ -296,10 +289,7 @@ export class Users extends AbstractRepository<User> {
     if (!userWithOTP?.otpSecretTemp) throw new Error('Unable to complete the OTP setup, as the secret was not present for the user');
     const isValid = authenticator.verify({ token: code, secret: userWithOTP.otpSecretTemp });
 
-    const otpSalt = env.var.DB_PASSWORD_2FA_SALT;
-    const otpHashedPassword = crypto.createHash('sha256')
-
-      .update(password + otpSalt, 'utf8').digest('hex');
+    const otpHashedPassword = await bcrypt.hash(password, 12);
     if (isValid) {
       await this.manager.createQueryBuilder(User, 'User').update({
         hashedPassword: otpHashedPassword,
@@ -327,10 +317,7 @@ export class Users extends AbstractRepository<User> {
     if (passwordResetExpiration < DateTime.now().valueOf()) {
       throw new Error('The password reset link has expired.');
     }
-    let salt = env.var.DB_PASSWORD_SALT;
-    if (user.otpSecret1) { salt = env.var.DB_PASSWORD_2FA_SALT; }
-    const newHashedPassword = crypto.createHash('sha256')
-      .update(newPassword + salt, 'utf-8').digest('hex');
+    const newHashedPassword = await bcrypt.hash(newPassword, 12);
 
     const result = await this.manager.createQueryBuilder(User, 'User').update({
       hashedPassword: newHashedPassword,

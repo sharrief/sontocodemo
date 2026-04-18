@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { RequestHandler } from 'express';
 import { ExpressMiddlewareInterface } from 'routing-controllers';
 import { authenticator } from 'otplib';
@@ -8,7 +8,6 @@ import { Users } from '@repositories';
 import { getConnection } from '@lib/db';
 import { loginLabels } from '@serverLabels';
 import { User } from '@entities';
-import env from '@lib/env';
 
 function validateEmail(email: string) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -20,17 +19,14 @@ async function checkUserEmailAndPass(email: string, password: string) {
     if (!connection) throw new Error(`Unable to establish the connection to the database while authenticating ${email}.`);
     const usersRepo = connection.getCustomRepository(Users);
 
-    let salt = env.var.DB_PASSWORD_SALT;
-    const { otpRequired, error } = await usersRepo.userOTPEnabled(email);
-    if (error) throw new Error(error);
-    if (otpRequired) salt = env.var.DB_PASSWORD_2FA_SALT;
+    const userWithHash = await usersRepo.findByEmailForAuth(email);
+    if (!userWithHash) return { user: null, otpRequired: false };
 
-    const hashedPassword = crypto.createHash('sha256')
-      .update(password + salt, 'utf8').digest('hex');
+    const passwordMatch = await bcrypt.compare(password, userWithHash.hashedPassword);
+    if (!passwordMatch) return { user: null, otpRequired: false };
 
-    const user = await usersRepo.findByEmailAndHashedPassword(email, hashedPassword);
-
-    return { user, otpRequired };
+    const otpRequired = !!userWithHash.otpSecret1;
+    return { user: userWithHash, otpRequired };
   } catch (error) {
     return { error };
   }
