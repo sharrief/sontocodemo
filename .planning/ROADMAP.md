@@ -26,12 +26,16 @@
 
 **Success Criteria** (what must be TRUE):
 1. Existing Dockerfile audited, builds successfully without errors
-2. docker-compose.yml and docker-compose.dev.yml configure app container and MySQL container with all required environment variables
+2. docker-compose.yml configures app container and MySQL container with all required environment variables
 3. App container boots ts-node dev backend with nodemon restart and winston debug logging
 4. Production webpack client bundle is served alongside the backend (hybrid mode working)
 5. MySQL container is healthy and app can connect using configured credentials and SSL profile
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Fix Dockerfile (node:20-alpine, nodemon CMD), audit .dockerignore, create .env.example
+- [ ] 01-02-PLAN.md — Fix docker-compose.yml (MySQL 8, healthcheck, depends_on, DB_SERVER, named build volume)
 
 ---
 
@@ -58,7 +62,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Docker Containerization | 0/? | Not started | — |
+| 1. Docker Containerization | 0/2 | Not started | — |
 | 2. zrok Public Access | 0/? | Not started | — |
 
 ---
