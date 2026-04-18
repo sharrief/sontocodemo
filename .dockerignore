@@ -1,4 +1,7 @@
 node_modules
+build/
+.env*
+lancedb/
 Dockerfile
 .dockerignore
 .git
