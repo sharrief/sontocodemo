@@ -108,7 +108,6 @@ export class Users extends AbstractRepository<User> {
       .andWhere(new Brackets((expression) => {
         expression
           .andWhere('user.role_id IN (:allowedRoles)', { allowedRoles: [RoleId.admin, RoleId.manager, RoleId.director, RoleId.seniorTrader] })
-          .orWhere('user.id IN (:userIds)', { userIds: [294, 443, 72, 762, 802] })
           .orWhere('user.hasAccountsAccess = 1');
       }));
     return query.getOne();

@@ -23,6 +23,9 @@ const sessionConfig: SessionOptions = {
   name: env.var.SESSION_NAME,
   cookie: {
     maxAge: 86400000, // 24HR
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict' as const,
   },
   store: undefined, // gets set in server.js
   resave: false,

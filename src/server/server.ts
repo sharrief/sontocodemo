@@ -45,6 +45,7 @@ if (env.var.APPINSIGHTS_INSTRUMENTATIONKEY) {
 }
 
 const expressApp = express();
+expressApp.set('trust proxy', 1);
 
 debug('Server starting...');
 
