@@ -2,26 +2,26 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-last_updated: "2026-04-18T05:26:17.926Z"
+status: executing
+last_updated: "2026-04-18T17:26:21.620Z"
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 2
+  total_plans: 4
   completed_plans: 2
-  percent: 100
+  percent: 50
 ---
 
 # STATE — sontocodemo
 
-**Project:** Containerize & Expose via zrok
+**Project:** Containerize & Expose via Cloudflare Tunnel
 **Initialized:** 2026-04-17
 
 ---
 
 ## Project Reference
 
-**Core Value:** The app runs reliably in Docker and is reachable from the public internet via a zrok tunnel — no cloud deployment required.
+**Core Value:** The app runs reliably in Docker and is reachable from the public internet via Cloudflare Tunnel at `https://sontocodemo.sharrief.com` — no cloud deployment required.
 
 **Current Focus:** Phase 01 — docker-containerization
 
@@ -30,7 +30,7 @@ progress:
 - Existing app (accounts, statements, trades, admin portal, onboarding) has partial Docker setup
 - Need to verify Dockerfile, configure docker-compose with MySQL and all env vars
 - Need to ensure hybrid runtime: production webpack client served with dev backend (ts-node + nodemon + logging)
-- Then expose via zrok (tunnel tool of choice)
+- Then expose via Cloudflare Tunnel (`cloudflared`) at `https://sontocodemo.sharrief.com`
 
 ---
 
@@ -40,7 +40,7 @@ Phase: 01 (docker-containerization) — EXECUTING
 Plan: 1 of 2
 **Phase:** 2
 **Plan:** Not started
-**Status:** Ready to plan
+**Status:** Ready to execute
 **Progress:** 0% (0 of 7 requirements mapped to completed phases)
 
 ---
@@ -50,7 +50,7 @@ Plan: 1 of 2
 **Requirement Coverage:** 7/7 mapped
 
 - Docker: DOCK-01, DOCK-02, DOCK-03
-- zrok: ZROK-01, ZROK-02, ZROK-03, ZROK-04
+- Cloudflare Tunnel: ZROK-01, ZROK-02, ZROK-03, ZROK-04
 
 **Phase Structure:** 2 phases (coarse granularity)
 
@@ -63,7 +63,7 @@ Plan: 1 of 2
 | Decision | Rationale | Status |
 |----------|-----------|--------|
 | Hybrid prod-frontend / dev-backend | Production webpack reduces noise; dev backend keeps restart fast and logging rich | Pending implementation |
-| zrok over ngrok | User's explicit choice | Pending implementation |
+| Cloudflare Tunnel over zrok/ngrok | Stable custom domain, valid TLS, free tier, domain already on Cloudflare DNS | Pending implementation |
 | Keep existing Dockerfile base | Audit first, patch rather than rewrite | Pending audit |
 
 ### Architecture Notes
@@ -87,7 +87,7 @@ Plan: 1 of 2
 
 - Must preserve existing Express/TypeORM/MySQL/React architecture (no rewrites)
 - Runtime mode: Production client bundle + dev/debug server (ts-node, nodemon, winston debug)
-- Tunneling: zrok (not ngrok or Cloudflare Tunnel)
+- Tunneling: Cloudflare Tunnel (`cloudflared`) — systemd service on host, routes `sontocodemo.sharrief.com` → `localhost:8901` → Docker container port 8080
 - Database: MySQL in Docker, same schema as existing ORM entities
 
 ### Blockers / TODOs
@@ -101,13 +101,13 @@ Plan: 1 of 2
 - [ ] Test MySQL connection and session store
 - [ ] Verify webpack prod build exists and is served
 
-**Phase 2 - zrok:**
+**Phase 2 - Cloudflare Tunnel:**
 
-- [ ] Research zrok installation method (binary download vs package manager)
-- [ ] Design account token management (where to store, when to read)
-- [ ] Build user confirmation flow (prompt before share)
-- [ ] Wire up zrok share command with port 8080
-- [ ] Verify public URL is reachable and routes correctly
+- [ ] Install `cloudflared` via Cloudflare apt repo on Debian host
+- [ ] Register tunnel as systemd service via `cloudflared service install <token>`
+- [ ] Update docker-compose port mapping to `8901:8080`
+- [ ] Update `.env.example` SITE_URL to `https://sontocodemo.sharrief.com`
+- [ ] Verify `https://sontocodemo.sharrief.com` is publicly reachable
 
 ---
 
@@ -125,7 +125,7 @@ Plan: 1 of 2
 
 - Existing Dockerfile and docker-compose files are mostly correct (audit to verify)
 - User has Docker and Docker Compose installed
-- User has zrok account or can create one quickly
+- User has a Cloudflare account with the tunnel token available from the Zero Trust dashboard
 - Host machine can run Docker containers (Linux, Mac, WSL2)
 
 ---

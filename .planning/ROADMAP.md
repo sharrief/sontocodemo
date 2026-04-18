@@ -10,7 +10,7 @@
 ## Phases
 
 - [ ] **Phase 1: Docker Containerization** - Audit Dockerfile, wire docker-compose with MySQL and env vars, verify hybrid runtime
-- [ ] **Phase 2: zrok Public Access** - Install zrok, enable account, configure share with user confirmation, expose app to public URL
+- [ ] **Phase 2: Cloudflare Tunnel Public Access** - Update docker-compose port mapping, update SITE_URL, install cloudflared via apt, register as systemd service, verify public URL
 
 ---
 
@@ -39,22 +39,28 @@ Plans:
 
 ---
 
-### Phase 2: zrok Public Access
+### Phase 2: Cloudflare Tunnel Public Access
 
-**Goal:** App is exposed to the public internet via a stable zrok tunnel, with user control over share lifecycle.
+**Goal:** App is exposed to the public internet via Cloudflare Tunnel at https://sontocodemo.sharrief.com, with the tunnel running as a persistent systemd service on the host.
+
+**Note:** Phase originally named "zrok Public Access" — tool decision changed to Cloudflare Tunnel per D-01. ZROK-01 through ZROK-04 requirements are satisfied by Cloudflare Tunnel equivalents.
 
 **Depends on:** Phase 1
 
 **Requirements:** ZROK-01, ZROK-02, ZROK-03, ZROK-04
 
 **Success Criteria** (what must be TRUE):
-1. zrok binary is installed and available on the host machine
-2. zrok is enabled with a valid account token (saved or persistent)
-3. User is prompted to confirm zrok share execution before it runs
-4. Public zrok URL is generated and routes traffic to the app container port (8080)
-5. User can reach the app from the public internet via the zrok URL
+1. docker-compose.yml exposes host port 8901 (Cloudflare Tunnel backend) mapped to container port 8080
+2. .env.example SITE_URL updated to https://sontocodemo.sharrief.com
+3. cloudflared binary installed on host via Cloudflare official apt repository
+4. cloudflared registered as a systemd service using the tunnel token (service starts on boot)
+5. User can reach the app from the public internet at https://sontocodemo.sharrief.com
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Update docker-compose.yml port mapping (8901:8080) and .env.example SITE_URL
+- [ ] 02-02-PLAN.md — Install cloudflared via apt, register systemd service, verify public URL end-to-end
 
 ---
 
@@ -62,8 +68,8 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Docker Containerization | 0/2 | Not started | — |
-| 2. zrok Public Access | 0/? | Not started | — |
+| 1. Docker Containerization | 2/2 | Complete | 2026-04-18 |
+| 2. Cloudflare Tunnel Public Access | 0/2 | Not started | — |
 
 ---
 

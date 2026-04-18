@@ -1,17 +1,17 @@
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
-**sontocodemo — Containerize & Expose via zrok**
+**sontocodemo — Containerize & Expose via Cloudflare Tunnel**
 
-A financial account management platform (accounts, statements, trades, transfers, admin portal, applicant onboarding) that currently runs locally. This initiative containerizes the existing application with Docker and exposes it to the internet using zrok, so it can be reached from a stable public URL.
+A financial account management platform (accounts, statements, trades, transfers, admin portal, applicant onboarding) that currently runs locally. This initiative containerizes the existing application with Docker and exposes it to the internet using Cloudflare Tunnel (`cloudflared`), so it can be reached at a stable public URL (`https://sontocodemo.sharrief.com`).
 
-**Core Value:** The app runs reliably in Docker and is reachable from the public internet via a zrok tunnel — no cloud deployment required.
+**Core Value:** The app runs reliably in Docker and is reachable from the public internet via a Cloudflare Tunnel — no cloud deployment required.
 
 ### Constraints
 
 - **Tech stack**: Must preserve existing Express/TypeORM/MySQL/React architecture — no rewrites
 - **Runtime mode**: Production client bundle + dev/debug server (ts-node, nodemon, winston debug)
-- **Tunneling**: zrok (not ngrok or Cloudflare Tunnel) — starting from scratch install
+- **Tunneling**: Cloudflare Tunnel (`cloudflared`) — systemd service on host, routes `sontocodemo.sharrief.com` → `localhost:8901` → Docker container port 8080
 - **Database**: MySQL in Docker, same schema as existing ORM entities
 <!-- GSD:project-end -->
 

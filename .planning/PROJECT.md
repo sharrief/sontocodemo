@@ -1,12 +1,12 @@
-# sontocodemo — Containerize & Expose via zrok
+# sontocodemo — Containerize & Expose via Cloudflare Tunnel
 
 ## What This Is
 
-A financial account management platform (accounts, statements, trades, transfers, admin portal, applicant onboarding) that currently runs locally. This initiative containerizes the existing application with Docker and exposes it to the internet using zrok, so it can be reached from a stable public URL.
+A financial account management platform (accounts, statements, trades, transfers, admin portal, applicant onboarding) that currently runs locally. This initiative containerizes the existing application with Docker and exposes it to the internet using Cloudflare Tunnel (`cloudflared`), so it can be reached at `https://sontocodemo.sharrief.com`.
 
 ## Core Value
 
-The app runs reliably in Docker and is reachable from the public internet via a zrok tunnel — no cloud deployment required.
+The app runs reliably in Docker and is reachable from the public internet via a Cloudflare Tunnel — no cloud deployment required.
 
 ## Requirements
 
@@ -29,20 +29,20 @@ The app runs reliably in Docker and is reachable from the public internet via a 
 - [ ] Hybrid runtime: production webpack bundle served by dev backend (ts-node + nodemon + winston debug logging)
 - [ ] MySQL container configured and connected (env vars, SSL profile, session store)
 - [ ] All required environment variables documented and wired into docker-compose
-- [ ] zrok installed, enabled, and sharing the container port publicly
-- [ ] Public zrok URL routes traffic correctly to the running app
+- [ ] cloudflared installed and registered as a systemd service on the host
+- [ ] `https://sontocodemo.sharrief.com` routes traffic correctly to the running app via Cloudflare Tunnel
 
 ### Out of Scope
 
-- Cloud/PaaS deployment (ECS, K8s, Fly.io, etc.) — zrok tunnel covers public exposure
-- Production hardening (SSL termination at origin, load balancing) — zrok handles TLS
+- Cloud/PaaS deployment (ECS, K8s, Fly.io, etc.) — Cloudflare Tunnel covers public exposure
+- Production hardening (SSL termination at origin, load balancing) — Cloudflare handles TLS
 - CI/CD pipeline — manual Docker workflow for now
 
 ## Context
 
 - Existing Docker files (Dockerfile, docker-compose.yml, docker-compose.dev.yml) are present but have not been verified recently — need audit and possibly repair
 - Stack: TypeScript, Express + routing-controllers, React 16, MySQL, TypeORM 0.2, socket.io 4, passport, nodemailer
-- zrok: OpenZiti-based tunneling tool; needs install → enable (account token) → share (port)
+- Cloudflare Tunnel (`cloudflared`): installed via apt on host, registered as systemd service with a tunnel token from the Cloudflare Zero Trust dashboard; routes `sontocodemo.sharrief.com` → `localhost:8901` → Docker port 8080
 - Hybrid mode rationale: production webpack build avoids HMR overhead while ts-node/nodemon keeps the backend fast to restart and logging verbose for debugging
 - DB SSL cert profile controlled by `DB_SERVER` env var (azure / digitalocean / dreamhost / localdreamhost)
 
@@ -50,7 +50,7 @@ The app runs reliably in Docker and is reachable from the public internet via a 
 
 - **Tech stack**: Must preserve existing Express/TypeORM/MySQL/React architecture — no rewrites
 - **Runtime mode**: Production client bundle + dev/debug server (ts-node, nodemon, winston debug)
-- **Tunneling**: zrok (not ngrok or Cloudflare Tunnel) — starting from scratch install
+- **Tunneling**: Cloudflare Tunnel (`cloudflared`) — systemd service on host, routes `sontocodemo.sharrief.com` → `localhost:8901` → Docker container port 8080
 - **Database**: MySQL in Docker, same schema as existing ORM entities
 
 ## Key Decisions
@@ -58,7 +58,7 @@ The app runs reliably in Docker and is reachable from the public internet via a 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Hybrid prod-frontend / dev-backend mode | Production webpack reduces noise; dev backend keeps restart fast and logging rich | — Pending |
-| zrok over ngrok | User's explicit choice | — Pending |
+| Cloudflare Tunnel over zrok/ngrok | Stable custom domain, valid TLS, free tier, domain already on Cloudflare DNS | — Pending |
 | Keep existing Dockerfile base | Audit first, patch rather than rewrite if possible | — Pending |
 
 ---
