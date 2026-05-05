@@ -100,7 +100,7 @@ export class Users extends AbstractRepository<User> {
   findByEmailForAuth(email: User['email']) {
     if (!email) return undefined;
     const query = this.createQueryBuilder('user')
-      .addSelect('user.password')
+      .addSelect('user.hashedPassword')
       .addSelect('user.otpSecret1')
       .where('user.email = :email', { email })
       .andWhere('user.deleted = 0')
