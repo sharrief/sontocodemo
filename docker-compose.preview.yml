@@ -1,0 +1,20 @@
+name: sontocodemo-preview
+services:
+  web-preview:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sontocodemo-preview-web
+    ports:
+      - "127.0.0.1:9080:8080"
+    networks:
+      - sontocodemo_sontoco-network
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - PORT=8080
+
+networks:
+  sontocodemo_sontoco-network:
+    external: true
