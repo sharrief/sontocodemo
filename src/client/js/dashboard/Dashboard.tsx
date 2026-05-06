@@ -18,6 +18,7 @@ import {
 } from 'react-router-dom';
 import AccountSelectorComponent from '@components/AccountSelector';
 import AccountStatements from '@client/js/components/AccountStatements/AccountStatements';
+import DashboardHome from './DashboardHome';
 import NavigationBar from '@client/js/components/NavigationBar';
 import Transactions from '@client/js/components/Transfers/Transfers';
 import DashboardAlerts from '@containers/Dashboard.Alerts';
@@ -28,6 +29,7 @@ import { Information } from '@components/Information';
 import TransferIcon from '@mui/icons-material/SwapHorizontalCircle';
 import BankAccountsIcon from '@mui/icons-material/AccountBalance';
 import StatementsIcon from '@mui/icons-material/Receipt';
+import HomeIcon from '@mui/icons-material/Home';
 import DocumentIcon from '@mui/icons-material/Description';
 import { DateTime, Duration } from 'luxon';
 import BottomNav from '@components/BottomNav';
@@ -39,6 +41,7 @@ import { endpoints } from '@api';
 import Brand from '@brand/brandLabels';
 
 export const DashboardTabs = {
+  home: 'home',
   statements: 'statements',
   transfers: 'transfers',
   information: 'information',
@@ -80,7 +83,7 @@ export const Dashboard = () => {
         if (!validAccount) {
           navigate(`${accounts[0].accountNumber}`);
         } else if (!activeTab || !Object.values(DashboardTabs).includes(activeTab)) {
-          navigate(`${accountNumber}/${DashboardTabs.statements}`);
+          navigate(`${accountNumber}/${DashboardTabs.home}`);
         }
       }
     }
@@ -128,6 +131,13 @@ export const Dashboard = () => {
 
   const navItems = [
     {
+      icon: <HomeIcon />,
+      label: <span>Home</span>,
+      key: DashboardTabs.home,
+      to: `${endpoints.dashboard}/${accountNumber}/${DashboardTabs.home}`,
+      classname: tabClass(DashboardTabs.home),
+    },
+    {
       icon: <StatementsIcon />,
       label: <span>{labels.TabTitleStatements}</span>,
       key: DashboardTabs.statements,
@@ -162,33 +172,42 @@ export const Dashboard = () => {
       <Helmet>
         <title>{Brand.MidName} - {labels.MyAccounts}</title>
       </Helmet>
-      <div className='dashboard'>
+      <div className={`dashboard${activeTab === DashboardTabs.home ? ' dashboard--home' : ''}`}>
         <NavigationBar hideLogoWhenLarge={false} />
         <Row className='m-0 align-items-stretch'>
-          <Col className='my-5 my-md-0 mt-md-5 py-4 py-md-0 pb-md-0 mb-md-0' style={{ height: '100vh', overflow: 'scroll' }}>
-            <div className="container px-0 px-md-3" >
-              <span className="mt-2 h5">
-                {header}
-              </span>
-              <Row>
-                <Col xs={12} md='auto' className='order-1 order-md-0 my-2'>
-                  <AccountSelectorComponent
-                    currentAccount={currentAccount}
-                    tab={activeTab}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col md='12'>
-                  <Nav className='d-none d-md-flex mb-3' variant='tabs' defaultActiveKey={activeTab} activeKey={activeTab}>
-                    {navItems.map(({
-                      icon, label, key, to,
-                    }) => <Nav.Item key={key}>
-                      <Nav.Link as={RouterLink} to={to} eventKey={key}>
-                        {label}
-                      </Nav.Link>
-                    </Nav.Item>)}
-                  </Nav>
+          <Col className={activeTab === DashboardTabs.home
+            ? 'p-0 m-0 mt-md-5'
+            : 'my-5 my-md-0 mt-md-5 py-4 py-md-0 pb-md-0 mb-md-0'}
+            style={{ height: '100vh', overflow: 'scroll' }}>
+            <div className={activeTab === DashboardTabs.home ? '' : 'container px-0 px-md-3'} >
+              {activeTab !== DashboardTabs.home && (
+                <>
+                  <span className="mt-2 h5">
+                    {header}
+                  </span>
+                  <Row>
+                    <Col xs={12} md='auto' className='order-1 order-md-0 my-2'>
+                      <AccountSelectorComponent
+                        currentAccount={currentAccount}
+                        tab={activeTab}
+                      />
+                    </Col>
+                  </Row>
+                </>
+              )}
+              <Row className={activeTab === DashboardTabs.home ? 'g-0 m-0' : ''}>
+                <Col md='12' className={activeTab === DashboardTabs.home ? 'p-0' : ''}>
+                  {activeTab !== DashboardTabs.home && (
+                    <Nav className='d-none d-md-flex mb-3' variant='tabs' defaultActiveKey={activeTab} activeKey={activeTab}>
+                      {navItems.map(({
+                        icon, label, key, to,
+                      }) => <Nav.Item key={key}>
+                        <Nav.Link as={RouterLink} to={to} eventKey={key}>
+                          {label}
+                        </Nav.Link>
+                      </Nav.Item>)}
+                    </Nav>
+                  )}
                   <Tab.Container activeKey={'activeTab'} id="tabs" mountOnEnter={true}>
                     <Tab.Content>
                       <Tab.Pane eventKey='activeTab'>
@@ -196,6 +215,10 @@ export const Dashboard = () => {
                           <Route path={`${accountNumber}/*`}
                             element={
                               <Routes>
+                                <Route
+                                  path={`${DashboardTabs.home}/*`}
+                                  element={<DashboardHome accountNumber={accountNumber} />}
+                                />
                                 <Route
                                   path={`${DashboardTabs.statements}/*`}
                                   element={<AccountStatements accountNumber={accountNumber} />}
@@ -230,17 +253,21 @@ export const Dashboard = () => {
                   </Tab.Container>
                 </Col>
               </Row>
-              <Row><Col>
-                {welcomeMessage}
-              </Col></Row>
+              {activeTab !== DashboardTabs.home && (
+                <Row><Col>
+                  {welcomeMessage}
+                </Col></Row>
+              )}
             </div>
           </Col>
         </Row>
         <DashboardAlerts />
-        <BottomNav
-          items={navItems}
-          activeKey={activeTab}
-        />
+        {activeTab !== DashboardTabs.home && (
+          <BottomNav
+            items={navItems}
+            activeKey={activeTab}
+          />
+        )}
       </div>
     </HelmetProvider>
   );

@@ -1,0 +1,576 @@
+// Dashboard Home — first paint composition
+// Specimen Sheet system, scoped under .dashboard-home so it does not
+// fight the surrounding Bootswatch chrome. Light is canonical;
+// prefers-color-scheme: dark flips the same identity into low light.
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+// When the dashboard shell is on the Home tab, override the surrounding
+// Bootswatch chrome so the Specimen Sheet view fills its container cleanly.
+.dashboard--home {
+  background-color: oklch(98% 0.005 75);
+
+  // Override the white .dashboard bg from Application.scss
+  &.dashboard { background-color: oklch(98% 0.005 75); }
+
+  // Tone down the top NavigationBar to bone-on-bone with a hairline bottom rule.
+  // The dropdown remains functional; only chrome is muted.
+  .top-nav.navbar {
+    background-color: oklch(98% 0.005 75) !important;
+    border-bottom: 1px solid oklch(89% 0.013 75);
+    box-shadow: none;
+    background-image: none;
+
+    .navbar-brand img { filter: none; }
+
+    .nav-link, .navbar-text, .dropdown-toggle {
+      color: oklch(20% 0.015 75) !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: oklch(15% 0.015 75);
+    &.dashboard { background-color: oklch(15% 0.015 75); }
+    .top-nav.navbar {
+      background-color: oklch(15% 0.015 75) !important;
+      border-bottom-color: oklch(28% 0.020 75);
+      .nav-link, .navbar-text, .dropdown-toggle { color: oklch(95% 0.008 75) !important; }
+    }
+  }
+}
+
+.dashboard-home {
+  // Tokens (light, canonical). Tint hue 75 = warm vellum.
+  --dh-bone-surface: oklch(98% 0.005 75);
+  --dh-bone-field:   oklch(96% 0.009 75);
+  --dh-margin:       oklch(89% 0.013 75);
+  --dh-ink:          oklch(20% 0.015 75);
+  --dh-ink-soft:     oklch(48% 0.012 75);
+  --dh-positive:     oklch(45% 0.085 145);
+  --dh-negative:     oklch(42% 0.110 25);
+  --dh-caution:      oklch(58% 0.100 75);
+
+  --dh-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --dh-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --dh-ease: cubic-bezier(0.22, 1, 0.36, 1);  // ease-out-quart
+
+  background-color: var(--dh-bone-surface);
+  color: var(--dh-ink);
+  font-family: var(--dh-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  min-height: 100%;
+  padding: 0;
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  // Layout shell. Single column, generous side margins on wider viewports.
+  &__inner {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+
+    @media (max-width: 720px) {
+      padding: 2rem 1.25rem 4rem;
+    }
+  }
+
+  // Zone 1 — Masthead. The fine print at the top of a private-bank statement.
+  &__masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--dh-margin);
+
+    @media (max-width: 540px) {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+
+  &__name {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--dh-ink);
+    letter-spacing: -0.005em;
+    margin: 0;
+  }
+
+  &__metaline {
+    font-family: var(--dh-mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--dh-ink-soft);
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    text-align: right;
+    letter-spacing: -0.01em;
+    margin: 0;
+    white-space: nowrap;
+
+    @media (max-width: 540px) { text-align: left; }
+  }
+
+  &__metaline-stale { color: var(--dh-caution); }
+
+  &__account-number {
+    font-family: var(--dh-mono);
+    color: var(--dh-ink);
+    font-weight: 500;
+  }
+
+  // Inline account switcher — admin / many-account context. Hosts the
+  // existing Bootstrap Dropdown but neutralizes Sandstone styling so the
+  // typeahead reads as part of the masthead, not as bolted-on chrome.
+  &__switcher {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0 0;
+
+    @media (max-width: 540px) {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+
+  &__switcher-label {
+    font-family: var(--dh-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dh-ink-soft);
+  }
+
+  &__switcher-control {
+    .btn,
+    .btn:focus,
+    .btn:focus-visible {
+      background-color: transparent !important;
+      background-image: none !important;
+      border: 1px solid var(--dh-margin) !important;
+      border-radius: 1px !important;
+      color: var(--dh-ink) !important;
+      font-family: var(--dh-mono) !important;
+      font-size: 0.8125rem !important;
+      font-weight: 500 !important;
+      padding: 0.5rem 0.875rem !important;
+      box-shadow: none !important;
+      transition: border-color 180ms var(--dh-ease) !important;
+      text-align: left;
+      max-width: 100%;
+    }
+    .btn:hover {
+      border-color: var(--dh-ink) !important;
+      background-color: transparent !important;
+      color: var(--dh-ink) !important;
+    }
+    .dropdown-menu {
+      border: 1px solid var(--dh-margin);
+      border-radius: 1px;
+      background-color: var(--dh-bone-surface);
+      box-shadow: 0 8px 24px oklch(20% 0.015 75 / 0.06);
+      padding: 0.5rem 0;
+      min-width: 18rem;
+      font-family: var(--dh-sans);
+    }
+    .form-control {
+      border: 1px solid var(--dh-margin);
+      border-radius: 1px;
+      background-color: var(--dh-bone-surface);
+      color: var(--dh-ink);
+      font-family: var(--dh-sans);
+      font-size: 0.875rem;
+      &:focus {
+        border-color: var(--dh-ink);
+        box-shadow: none;
+        outline: none;
+      }
+    }
+    .dropdown-item {
+      color: var(--dh-ink);
+      padding: 0.5rem 1rem;
+      font-family: var(--dh-mono) !important;
+      font-size: 0.8125rem !important;
+      &:hover, &:focus {
+        background-color: var(--dh-bone-field);
+        color: var(--dh-ink);
+      }
+      &.active {
+        background-color: var(--dh-bone-field);
+        color: var(--dh-ink);
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Zone 2 — Specimen. Balance is large and quiet; delta carries the spark.
+  &__specimen {
+    padding: 5rem 0 4.5rem;
+
+    @media (max-width: 720px) {
+      padding: 3.25rem 0 2.75rem;
+    }
+  }
+
+  &__specimen-label {
+    font-family: var(--dh-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dh-ink-soft);
+    margin: 0 0 0.875rem;
+  }
+
+  &__balance {
+    font-family: var(--dh-mono);
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--dh-ink);
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums lining-nums;
+    margin: 0;
+    cursor: pointer;
+    transition: color 180ms var(--dh-ease);
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    display: block;
+
+    &:hover, &:focus-visible {
+      color: oklch(28% 0.018 75);
+      outline: none;
+    }
+  }
+
+  &__balance-cents {
+    color: var(--dh-ink-soft);
+    font-weight: 400;
+  }
+
+  &__delta {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+
+    font-family: var(--dh-mono);
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums lining-nums;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    color: inherit;
+
+    &:focus-visible { outline: none; }
+  }
+
+  &__delta-figure {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  &__delta--positive .dashboard-home__delta-figure { color: var(--dh-positive); }
+  &__delta--negative .dashboard-home__delta-figure { color: var(--dh-negative); }
+  &__delta--neutral  .dashboard-home__delta-figure { color: var(--dh-ink-soft); }
+
+  &__delta-period {
+    font-family: var(--dh-sans);
+    font-size: 0.75rem;
+    color: var(--dh-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  &__delta-empty {
+    font-family: var(--dh-sans);
+    font-size: 0.9375rem;
+    color: var(--dh-ink-soft);
+    font-style: normal;
+  }
+
+  // Zone 3 — Activity since. Tonal step into Bone Field, hairline-divided rows.
+  &__activity {
+    background-color: var(--dh-bone-field);
+    margin: 0 -2rem;
+    padding: 2.25rem 2rem 2.5rem;
+    border-radius: 0;
+
+    @media (max-width: 720px) {
+      margin: 0 -1.25rem;
+      padding: 1.75rem 1.25rem 2rem;
+    }
+  }
+
+  &__activity-label {
+    font-family: var(--dh-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dh-ink-soft);
+    margin: 0 0 1.25rem;
+  }
+
+  &__activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--dh-margin);
+  }
+
+  &__activity-row {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--dh-margin);
+    cursor: pointer;
+    color: var(--dh-ink);
+    text-decoration: none;
+    transition: padding 180ms var(--dh-ease), color 180ms var(--dh-ease);
+
+    &:hover, &:focus-visible {
+      padding-left: 0.5rem;
+      color: var(--dh-ink);
+      outline: none;
+    }
+
+    @media (max-width: 540px) {
+      grid-template-columns: 4rem 1fr;
+      gap: 0.75rem;
+      .dashboard-home__activity-meta {
+        grid-column: 2 / -1;
+        text-align: left;
+        padding-top: 0.125rem;
+      }
+    }
+  }
+
+  &__activity-date {
+    font-family: var(--dh-mono);
+    font-size: 0.75rem;
+    color: var(--dh-ink-soft);
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.005em;
+  }
+
+  &__activity-name {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  &__activity-meta {
+    font-family: var(--dh-mono);
+    font-size: 0.8125rem;
+    color: var(--dh-ink-soft);
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums lining-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__activity-meta--positive { color: var(--dh-positive); }
+  &__activity-meta--negative { color: var(--dh-negative); }
+  &__activity-meta--caution  { color: var(--dh-caution); }
+  &__activity-meta--neutral  { color: var(--dh-ink-soft); }
+
+  &__activity-empty {
+    font-family: var(--dh-sans);
+    font-size: 0.9375rem;
+    color: var(--dh-ink-soft);
+    margin: 0;
+    padding: 0.5rem 0 0;
+  }
+
+  &__activity-more {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--dh-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--dh-ink-soft);
+    text-decoration: none;
+    letter-spacing: -0.005em;
+    transition: color 180ms var(--dh-ease);
+
+    &:hover, &:focus-visible {
+      color: var(--dh-ink);
+      outline: none;
+    }
+  }
+
+  // Zone 4 — AccountSelector. Below the fold for multi-account holders.
+  &__selector {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--dh-margin);
+  }
+
+  &__selector-label {
+    font-family: var(--dh-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dh-ink-soft);
+    margin: 0 0 1rem;
+  }
+
+  &__selector-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__selector-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--dh-margin);
+    cursor: pointer;
+    color: var(--dh-ink);
+    text-decoration: none;
+    transition: color 180ms var(--dh-ease);
+
+    &:hover, &:focus-visible {
+      color: oklch(28% 0.018 75);
+      outline: none;
+    }
+
+    &--current {
+      cursor: default;
+      color: var(--dh-ink-soft);
+    }
+
+    @media (max-width: 540px) {
+      grid-template-columns: 1fr auto;
+      .dashboard-home__selector-delta { grid-column: 1 / -1; text-align: left; }
+    }
+  }
+
+  &__selector-name {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  &__selector-balance,
+  &__selector-delta {
+    font-family: var(--dh-mono);
+    font-size: 0.8125rem;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums lining-nums;
+    text-align: right;
+  }
+
+  &__selector-balance { color: var(--dh-ink); }
+  &__selector-delta--positive { color: var(--dh-positive); }
+  &__selector-delta--negative { color: var(--dh-negative); }
+  &__selector-delta--neutral  { color: var(--dh-ink-soft); }
+
+  // Skeleton states — bone-on-bone tonal blocks at the right scale.
+  &__skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--dh-bone-field) 0%,
+      var(--dh-margin) 50%,
+      var(--dh-bone-field) 100%
+    );
+    background-size: 200% 100%;
+    border-radius: 1px;
+    animation: dashboard-home-shimmer 1600ms var(--dh-ease) infinite;
+  }
+
+  &__skeleton--name        { height: 0.875rem; width: 9rem; }
+  &__skeleton--meta        { height: 0.75rem;  width: 14rem; }
+  &__skeleton--balance     { height: clamp(3rem, 8vw, 4.5rem); width: 18rem; max-width: 100%; }
+  &__skeleton--delta       { height: 1rem;     width: 11rem; margin-top: 1.5rem; }
+  &__skeleton--row         { height: 1rem;     width: 100%; }
+
+  // Reveal sequence — choreographed but quiet. ease-out-quart, no Y-translate-down.
+  &--revealing &__masthead { animation: dashboard-home-fade 320ms var(--dh-ease) both; animation-delay: 0ms; }
+  &--revealing &__balance,
+  &--revealing &__specimen-label { animation: dashboard-home-rise 360ms var(--dh-ease) both; animation-delay: 80ms; }
+  &--revealing &__delta    { animation: dashboard-home-rise-soft 320ms var(--dh-ease) both; animation-delay: 280ms; }
+  &--revealing &__activity { animation: dashboard-home-fade 320ms var(--dh-ease) both; animation-delay: 360ms; }
+  &--revealing &__activity-row {
+    animation: dashboard-home-fade 240ms var(--dh-ease) both;
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}) { animation-delay: #{420 + ($i - 1) * 30}ms; }
+    }
+  }
+  &--revealing &__selector { animation: dashboard-home-fade 280ms var(--dh-ease) both; animation-delay: 600ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    &--revealing &__masthead,
+    &--revealing &__balance,
+    &--revealing &__specimen-label,
+    &--revealing &__delta,
+    &--revealing &__activity,
+    &--revealing &__activity-row,
+    &--revealing &__selector {
+      animation: none;
+    }
+    .dashboard-home__skeleton { animation: none; }
+  }
+
+  // Dark variant — same identity, low-light. Spark slightly brighter.
+  @media (prefers-color-scheme: dark) {
+    --dh-bone-surface: oklch(15% 0.015 75);
+    --dh-bone-field:   oklch(19% 0.018 75);
+    --dh-margin:       oklch(28% 0.020 75);
+    --dh-ink:          oklch(95% 0.008 75);
+    --dh-ink-soft:     oklch(72% 0.012 75);
+    --dh-positive:     oklch(60% 0.10 145);
+    --dh-negative:     oklch(58% 0.13 25);
+    --dh-caution:      oklch(70% 0.10 75);
+
+    .dashboard-home__balance:hover,
+    .dashboard-home__balance:focus-visible,
+    .dashboard-home__selector-row:hover,
+    .dashboard-home__selector-row:focus-visible { color: oklch(99% 0.008 75); }
+  }
+}
+
+@keyframes dashboard-home-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes dashboard-home-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dashboard-home-rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dashboard-home-rise-soft {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
