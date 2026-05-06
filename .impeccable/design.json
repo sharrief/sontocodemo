@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-06T20:00:00.000Z",
+  "title": "Design System: Sontocodemo",
+  "extensions": {
+    "colorMeta": {
+      "bone-surface": {
+        "role": "neutral",
+        "displayName": "Bone Surface",
+        "canonical": "oklch(98% 0.005 75)",
+        "tonalRamp": [
+          "oklch(20% 0.015 75)",
+          "oklch(28% 0.018 75)",
+          "oklch(40% 0.014 75)",
+          "oklch(55% 0.012 75)",
+          "oklch(70% 0.011 75)",
+          "oklch(85% 0.010 75)",
+          "oklch(96% 0.009 75)",
+          "oklch(98% 0.005 75)"
+        ]
+      },
+      "bone-field": {
+        "role": "neutral",
+        "displayName": "Bone Field",
+        "canonical": "oklch(96% 0.009 75)",
+        "tonalRamp": [
+          "oklch(18% 0.018 75)",
+          "oklch(26% 0.020 75)",
+          "oklch(38% 0.016 75)",
+          "oklch(52% 0.014 75)",
+          "oklch(68% 0.013 75)",
+          "oklch(82% 0.012 75)",
+          "oklch(92% 0.010 75)",
+          "oklch(96% 0.009 75)"
+        ]
+      },
+      "margin": {
+        "role": "neutral",
+        "displayName": "Margin",
+        "canonical": "oklch(89% 0.013 75)",
+        "tonalRamp": [
+          "oklch(20% 0.020 75)",
+          "oklch(32% 0.020 75)",
+          "oklch(46% 0.018 75)",
+          "oklch(60% 0.016 75)",
+          "oklch(74% 0.015 75)",
+          "oklch(82% 0.014 75)",
+          "oklch(89% 0.013 75)",
+          "oklch(95% 0.011 75)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "oklch(48% 0.012 75)",
+        "tonalRamp": [
+          "oklch(15% 0.015 75)",
+          "oklch(22% 0.014 75)",
+          "oklch(30% 0.013 75)",
+          "oklch(38% 0.013 75)",
+          "oklch(48% 0.012 75)",
+          "oklch(58% 0.011 75)",
+          "oklch(68% 0.010 75)",
+          "oklch(80% 0.008 75)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(20% 0.015 75)",
+        "tonalRamp": [
+          "oklch(12% 0.018 75)",
+          "oklch(20% 0.015 75)",
+          "oklch(28% 0.018 75)",
+          "oklch(38% 0.014 75)",
+          "oklch(50% 0.012 75)",
+          "oklch(65% 0.011 75)",
+          "oklch(80% 0.009 75)",
+          "oklch(95% 0.008 75)"
+        ]
+      },
+      "positive": {
+        "role": "primary",
+        "displayName": "Editorial Moss",
+        "canonical": "oklch(45% 0.085 145)",
+        "tonalRamp": [
+          "oklch(20% 0.060 145)",
+          "oklch(30% 0.075 145)",
+          "oklch(38% 0.082 145)",
+          "oklch(45% 0.085 145)",
+          "oklch(55% 0.080 145)",
+          "oklch(68% 0.070 145)",
+          "oklch(82% 0.050 145)",
+          "oklch(94% 0.025 145)"
+        ]
+      },
+      "negative": {
+        "role": "primary",
+        "displayName": "Editorial Oxblood",
+        "canonical": "oklch(42% 0.110 25)",
+        "tonalRamp": [
+          "oklch(18% 0.080 25)",
+          "oklch(28% 0.100 25)",
+          "oklch(35% 0.108 25)",
+          "oklch(42% 0.110 25)",
+          "oklch(54% 0.105 25)",
+          "oklch(68% 0.090 25)",
+          "oklch(82% 0.060 25)",
+          "oklch(94% 0.030 25)"
+        ]
+      },
+      "caution": {
+        "role": "tertiary",
+        "displayName": "Editorial Ochre",
+        "canonical": "oklch(58% 0.100 75)",
+        "tonalRamp": [
+          "oklch(25% 0.070 75)",
+          "oklch(36% 0.085 75)",
+          "oklch(46% 0.095 75)",
+          "oklch(58% 0.100 75)",
+          "oklch(68% 0.095 75)",
+          "oklch(78% 0.080 75)",
+          "oklch(88% 0.055 75)",
+          "oklch(96% 0.025 75)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Specimen",
+        "purpose": "Balance set pieces only. One per page. The most-tested element on Home."
+      },
+      "title": {
+        "displayName": "Title (Mono)",
+        "purpose": "The delta figure (percent + dollars) and any monetary mid-scale element."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Account holder names, activity row labels, descriptions. Sans, 65–75ch where prose appears."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section orienting labels (Account balance, Activity, Switch account). Uppercase, generous letter-spacing."
+      },
+      "mono-numeric": {
+        "displayName": "Mono Numeric",
+        "purpose": "Every secondary numeric: activity row meta, account numbers, dates, timestamps. Always tabular figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift-low",
+        "value": "0 8px 24px oklch(20% 0.015 75 / 0.06)",
+        "purpose": "Dropdowns, tooltips, and command-palette overlays anchored to a trigger. The only shadow used in the system today."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Default easing for every transition and reveal sequence. No bounce, no elastic, no ease-in."
+      },
+      {
+        "name": "duration-state",
+        "value": "180ms",
+        "purpose": "Hover, focus, color, and border-color state transitions."
+      },
+      {
+        "name": "duration-transition",
+        "value": "240ms",
+        "purpose": "Activity row stagger fade-in, secondary reveal steps."
+      },
+      {
+        "name": "duration-rise",
+        "value": "320ms",
+        "purpose": "Soft 2px Y-translate rises (delta indicator entrance)."
+      },
+      {
+        "name": "duration-rise-large",
+        "value": "360ms",
+        "purpose": "4px Y-translate rises (specimen balance entrance)."
+      },
+      {
+        "name": "reveal-total",
+        "value": "700ms",
+        "purpose": "Full Home first-paint reveal sequence runtime, end to end."
+      }
+    ],
+    "breakpoints": [
+      { "name": "narrow", "value": "540px" },
+      { "name": "medium", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Specimen Balance",
+      "kind": "button",
+      "refersTo": "button-balance",
+      "description": "The set-piece mono balance on the Home tab. Click routes to Statements.",
+      "html": "<button class=\"ds-balance\" type=\"button\" aria-label=\"Account balance $1,234,567.89, view statements\">$1,234,567<span class=\"ds-balance-cents\">.89</span></button>",
+      "css": ".ds-balance { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1; font-weight: 500; letter-spacing: -0.025em; color: oklch(20% 0.015 75); font-feature-settings: 'tnum' on, 'lnum' on; font-variant-numeric: tabular-nums lining-nums; background: none; border: none; padding: 0; text-align: left; display: block; cursor: pointer; transition: color 180ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-balance:hover, .ds-balance:focus-visible { color: oklch(28% 0.018 75); outline: none; } .ds-balance-cents { color: oklch(48% 0.012 75); font-weight: 400; }"
+    },
+    {
+      "name": "Period Delta (positive)",
+      "kind": "button",
+      "refersTo": "button-delta-positive",
+      "description": "The sign-colored period delta. Carries the chromatic spark on the Home tab.",
+      "html": "<button class=\"ds-delta ds-delta--positive\" type=\"button\"><span class=\"ds-delta-figure\">+1.84%&nbsp;&nbsp;·&nbsp;&nbsp;+$22,891.40</span><span class=\"ds-delta-period\">Since March 2024</span></button>",
+      "css": ".ds-delta { margin-top: 1.5rem; display: flex; align-items: baseline; gap: 0.875rem; flex-wrap: wrap; font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: 'tnum' on, 'lnum' on; font-variant-numeric: tabular-nums lining-nums; cursor: pointer; background: none; border: none; padding: 0; text-align: left; color: inherit; } .ds-delta:focus-visible { outline: none; } .ds-delta-figure { font-size: 1.125rem; font-weight: 500; letter-spacing: -0.01em; } .ds-delta--positive .ds-delta-figure { color: oklch(45% 0.085 145); } .ds-delta--negative .ds-delta-figure { color: oklch(42% 0.110 25); } .ds-delta-period { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; color: oklch(48% 0.012 75); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }"
+    },
+    {
+      "name": "Activity Row",
+      "kind": "list-item",
+      "refersTo": "activity-row",
+      "description": "Row in the Home tab Activity feed: 3-column grid of date / name / signed amount. Hover translates 0.5rem right.",
+      "html": "<a class=\"ds-activity-row\" href=\"#\"><span class=\"ds-activity-date\">Apr 30</span><span class=\"ds-activity-name\">March 2024 statement closed</span><span class=\"ds-activity-meta ds-activity-meta--positive\">+$22,891.40</span></a>",
+      "css": ".ds-activity-row { display: grid; grid-template-columns: 4.5rem 1fr auto; align-items: baseline; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid oklch(89% 0.013 75); cursor: pointer; color: oklch(20% 0.015 75); text-decoration: none; transition: padding 180ms cubic-bezier(0.22, 1, 0.36, 1), color 180ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-activity-row:hover, .ds-activity-row:focus-visible { padding-left: 0.5rem; outline: none; } .ds-activity-date { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem; color: oklch(48% 0.012 75); font-feature-settings: 'tnum' on, 'lnum' on; font-variant-numeric: tabular-nums lining-nums; letter-spacing: -0.005em; } .ds-activity-name { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.005em; } .ds-activity-meta { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; font-feature-settings: 'tnum' on, 'lnum' on; font-variant-numeric: tabular-nums lining-nums; text-align: right; white-space: nowrap; } .ds-activity-meta--positive { color: oklch(45% 0.085 145); } .ds-activity-meta--negative { color: oklch(42% 0.110 25); } .ds-activity-meta--caution { color: oklch(58% 0.100 75); } .ds-activity-meta--neutral { color: oklch(48% 0.012 75); }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "label",
+      "refersTo": "label-uppercase",
+      "description": "Uppercase orienting label above each zone (Account balance, Activity, Switch account, Other accounts).",
+      "html": "<p class=\"ds-section-label\">Account balance</p>",
+      "css": ".ds-section-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: oklch(48% 0.012 75); margin: 0 0 0.875rem; }"
+    },
+    {
+      "name": "Activity Panel",
+      "kind": "card",
+      "refersTo": "panel-field",
+      "description": "Tonal Bone-Field band that hosts the Activity feed. No card, no shadow, no radius. Bleeds to the column edges via negative horizontal margin.",
+      "html": "<section class=\"ds-panel-field\" aria-label=\"Recent activity\"><p class=\"ds-section-label\">Activity</p><ul class=\"ds-panel-list\"><li><a class=\"ds-activity-row\" href=\"#\"><span class=\"ds-activity-date\">Apr 30</span><span class=\"ds-activity-name\">March 2024 statement closed</span><span class=\"ds-activity-meta ds-activity-meta--positive\">+$22,891.40</span></a></li></ul></section>",
+      "css": ".ds-panel-field { background-color: oklch(96% 0.009 75); margin: 0 -2rem; padding: 2.25rem 2rem 2.5rem; } .ds-panel-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid oklch(89% 0.013 75); }"
+    },
+    {
+      "name": "Switcher Trigger (typeahead button)",
+      "kind": "input",
+      "refersTo": "button-switcher",
+      "description": "The override style applied over the existing Bootstrap Dropdown trigger so the typeahead reads as part of the masthead, not as Bootstrap chrome.",
+      "html": "<button class=\"ds-switcher-trigger\" type=\"button\">SHARRIEF SHABAZZ | 742528967 ▾</button>",
+      "css": ".ds-switcher-trigger { background-color: transparent; background-image: none; border: 1px solid oklch(89% 0.013 75); border-radius: 1px; color: oklch(20% 0.015 75); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; font-weight: 500; padding: 0.5rem 0.875rem; box-shadow: none; transition: border-color 180ms cubic-bezier(0.22, 1, 0.36, 1); text-align: left; max-width: 100%; cursor: pointer; } .ds-switcher-trigger:hover { border-color: oklch(20% 0.015 75); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Specimen Sheet",
+    "overview": "The system reads like a type-foundry specimen sheet meeting a private-bank statement. Surfaces are warm bone (tinted hue 75); type is near-black ink with a slight warm cast; numerics live in JetBrains Mono with tabular figures, so every balance, percentage, and date scans as a measured object. One chromatic moment per screen, sign-colored on monetary deltas, does the work that a dozen Bootstrap accents used to do. Density is comfortable, not cramped. Personality lives in three places: the type pairing (Inter for sans, JetBrains Mono for every numeric), the tabular numeric treatment with decimal alignment, and a quiet choreographed reveal on most-judged surfaces. Everywhere else the surface gets out of the way.",
+    "keyCharacteristics": [
+      "Warm bone surfaces (hue 75), cool near-black ink type, one saturated chromatic spark per screen.",
+      "Three-part type pairing: Inter for sans display + body + label, JetBrains Mono for every numeric.",
+      "Tabular numerics with decimal alignment are a load-bearing detail, not an afterthought.",
+      "One committed identity. Dark variant is the same identity in low light, not a different brand.",
+      "Hairline 1px borders and Bone-Surface to Bone-Field tonal steps in place of shadows on static surfaces.",
+      "Choreographed reveal (~700ms total, ease-out-quart) on entry of most-judged surfaces; honors prefers-reduced-motion."
+    ],
+    "rules": [
+      { "name": "The One Spark Rule", "body": "The chromatic spark appears on no more than 10% of any given screen. Its rarity is what makes it work. If a design seems to need the spark in two places at once, it needs it in zero — find the structural problem instead.", "section": "colors" },
+      { "name": "The Tinted Neutrals Rule", "body": "Every neutral carries a trace of the spark hue (chroma 0.005–0.013 in OKLCH). Pure greys are forbidden. Pure black and pure white are forbidden.", "section": "colors" },
+      { "name": "The Sign Color Rule", "body": "Editorial Moss and Editorial Oxblood are reserved for monetary sign in tables, balances, and the delta indicator. They are not used for general error / success UI chrome — that is the role of icons plus Ink type, not color floods.", "section": "colors" },
+      { "name": "The Tabular Mono Rule", "body": "Numerics are always set in JetBrains Mono with tabular figures. Decimal points align across rows. A column of balances scans top-to-bottom in straight vertical lines, or the table is wrong.", "section": "typography" },
+      { "name": "The One Specimen Rule", "body": "A page has at most one Display-scale (Specimen) element. Display's authority comes from its rarity.", "section": "typography" },
+      { "name": "The No Decorative Type Rule", "body": "No gradient text. No background-clip: text. No outlined or hollow display type. No script faces. No emoji-as-glyph in body text.", "section": "typography" },
+      { "name": "The Tonal-First Rule", "body": "Cards, panels, and table rows convey hierarchy through Bone Surface to Bone Field tonal shifts before reaching for borders or shadows. If a surface needs a shadow to feel like a surface, the tonal contrast is wrong.", "section": "elevation" },
+      { "name": "The No Decorative Shadow Rule", "body": "Shadows answer the question 'is this thing detached from the page?'. If the answer is no, no shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do carry the warm bone + ink + single-spark identity through every surface. One coherent identity, not four swappable themes.",
+      "Do set every balance, account number, trade price, and date in JetBrains Mono with tabular figures. Decimal alignment is a load-bearing detail.",
+      "Do tint every neutral toward hue 75 (chroma 0.005–0.013 in OKLCH). Pure greys are forbidden.",
+      "Do reserve Display / Specimen scale for one element per page, maximum.",
+      "Do convey panel and card hierarchy through tonal Bone Surface to Bone Field shifts before reaching for borders or shadows.",
+      "Do earn the chromatic spark on every appearance: sign-colored delta, primary CTA, brand mark. Never decoration.",
+      "Do reserve choreographed reveals for most-judged surfaces (Home first paint, Login, Statement open). Restrained state-change motion everywhere else.",
+      "Do honor prefers-reduced-motion: when set, every reveal sequence resolves instantly to the default state with no Y-translation, opacity, or stagger.",
+      "Do apply the .dashboard--home chrome override (bone-on-bone NavigationBar, hidden tab strip, hidden BottomNav) on any new surface that wants Specimen Sheet feel."
+    ],
+    "donts": [
+      "Don't ship default Bootswatch or Bootstrap chrome on Specimen Sheet surfaces. The 'swap themes as a feature' pattern is what is being escaped.",
+      "Don't use neon-on-black, hype gradients, emoji rockets, or any crypto / fintech-bro signaling.",
+      "Don't use AI-SaaS purple gradients, the hero-metric template, or identical icon-card grids.",
+      "Don't reach for the corporate-bank navy / gold reflex. Editorial-financial, not boardroom-financial.",
+      "Don't use #000 or #fff. Don't combine background-clip: text with a gradient. Don't use a border-left greater than 1px as a colored side stripe. Don't use glassmorphism decoratively. Don't reach for a modal as the first thought.",
+      "Don't use em dashes in product copy. Use commas, colons, semicolons, parentheses, or interpunct (·).",
+      "Don't allow more than one chromatic-spark moment per screen.",
+      "Don't ship balances or numerics in Inter (or any proportional sans). Numerics live in JetBrains Mono, always, with tabular figures.",
+      "Don't add box-shadow to static surfaces.",
+      "Don't branch the Home view by user role. Admin, manager, account-holder all see exactly the same render."
+    ]
+  }
+}
