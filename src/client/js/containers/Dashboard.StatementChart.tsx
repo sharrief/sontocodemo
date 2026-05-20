@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { DateTime } from 'luxon';
+import { Chart as ChartJS, ChartOptions, ChartData, ScaleOptions, TooltipItem } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { ChartOptions, ChartData } from 'chart.js';
 import { DefaultPortfolioStatementsState } from '@store/state';
 import { currency, currencyShort, formats } from '@helpers';
 import { createSlice } from '@reduxjs/toolkit';
@@ -13,6 +13,16 @@ import FormRange from 'react-bootstrap/esm/FormRange';
 import { Row, Col } from 'react-bootstrap';
 import ZoomIn from '@mui/icons-material/ZoomIn';
 import ZoomOut from '@mui/icons-material/ZoomOut';
+
+ChartJS.register(
+  'bar',
+  'line',
+  'linear',
+  'categoryScale',
+  'legend',
+  'title',
+  'tooltip',
+);
 
 export const PortfolioAccountsSlice = createSlice({
   name: 'PortfolioAccounts',
@@ -59,61 +69,65 @@ function AccountBalancesBarChart(props: { accountNumber: string}) {
   const balancesByMonthsBack = months.map((date) => balances.find(({ month, year }) => date.month === month && date.year === year) || { endBalance: 0 });
   const operationsByMonthsBack = months.map((date) => accumulatedOperations.find(({ monthYear }) => date.toFormat('M-yyyy') === monthYear) || { total: 0 });
 
-  const barData: ChartData = {
+  const barData: ChartData<'line'> = {
     labels: months.map((luxonMonth) => luxonMonth.toFormat(formats.chartMonth)),
     datasets: [
       {
         label: 'Deposits',
-        type: 'line',
+        type: 'line' as const,
         fill: 'origin',
         data: operationsByMonthsBack.map(({ total }) => total),
-        yAxisID: 'y-axis-1',
+        yAxis: 'y-axis-1',
       },
       {
         label: 'Balance',
-        type: 'line',
+        type: 'line' as const,
         fill: 0,
         backgroundColor: 'rgba(147,197,75,.3)',
         data: balancesByMonthsBack.map(({ endBalance }) => endBalance),
         borderColor: `rgba(236,188,30,${3 / 5})`,
-        yAxisID: 'y-axis-1',
+        yAxis: 'y-axis-1',
       },
     ],
   };
-  const barOptions: ChartOptions = {
-    legend: { display: false },
+  const barOptions: ChartOptions<'line'> = {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'nearest' as const,
+        callbacks: {
+          label: (context: TooltipItem<'line'>) => {
+            const ds = context.dataset;
+            const idx = context.dataIndex;
+            if (context.datasetIndex === 0) {
+              return `${ds.label}: ${currency(Number(ds.data![idx]))}`;
+            }
+            return `${ds.label}: ${currency(Number(ds.data![idx]))}\nDividends: ${currency(Number(
+              (+ds.data![idx]) - (+context.chart.data.datasets[idx - 1].data![idx]),
+            ))}`;
+          },
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
     responsive: true,
     aspectRatio: 2,
     maintainAspectRatio: false,
-    tooltips: {
-      mode: 'nearest',
-      callbacks: {
-        label: function tooltipCallback(item, { datasets }) {
-          if (item.datasetIndex === 0) {
-            return `${datasets[item.datasetIndex].label}: ${currency(Number(datasets[item.datasetIndex].data[item.index]))}`;
-          }
-          return `${datasets[item.datasetIndex].label}: ${currency(Number(datasets[item.datasetIndex].data[item.index]))}\nDividends: ${currency(Number(
-            (+datasets[item.datasetIndex].data[item.index]) - (+datasets[item.datasetIndex - 1].data[item.index]),
-          ))}`;
-        },
-      },
-    },
-    title: {
-      display: false,
-    },
     scales: {
-      yAxes: [{
-        id: 'y-axis-1',
+      'y-axis-1': {
+        type: 'linear' as const,
         display: true,
-        position: 'left',
+        position: 'left' as const,
         ticks: {
           beginAtZero: false,
           suggestedMin: minBalance,
           suggestedMax: maxBalance,
           maxTicksLimit: 6,
-          callback: (value) => currencyShort(Number(value)),
+          callback: (value: number) => currencyShort(Number(value)),
         },
-      }],
+      },
     },
   };
 
