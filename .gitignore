@@ -13,3 +13,5 @@ ormconfig.json
 .vscode
 .DS_Store
 src/server/lib/certs/ca-certificate.cer
+.claude
+lancedb
